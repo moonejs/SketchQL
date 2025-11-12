@@ -1,7 +1,11 @@
 import { useState, useCallback } from 'react';
-import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
+import { ReactFlow,Background, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
- 
+
+
+
+
+import NavBar from './Navbar/NavBar'
 import TableNode from './TableNode';
 
 const nodeTypes = {
@@ -44,6 +48,8 @@ export default function App() {
   );
  
   return (
+    <div className="d-flex flex-column vh-100">
+      <NavBar/>
     <div style={{ width: '100vw', height: '100vh' }}>
       <ReactFlow
         nodes={nodes}
@@ -53,8 +59,11 @@ export default function App() {
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         fitView
-      />
+        >
+        <Background/>
+      </ReactFlow>
       
+    </div>
     </div>
   );
 }
