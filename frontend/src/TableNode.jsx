@@ -1,13 +1,16 @@
 import { Handle, Position } from '@xyflow/react';
-import NodeColumn from './NodeColumn';
+import TableHeading from './TableHeading';
+import TableColumn from './TableColumn';
 export default function TableNode({data}){
     return(
-        <div>
-            <div>
-                {data.label}
-            </div>
-            <NodeColumn columns={data.columns} />
+        <table className="table table-bordered table-sm m-0 ">
+            <TableHeading label={data.label}/>
+            <tbody>
+                {data.columns.map((col,index)=>(
+                    <TableColumn col={col} key={index}/>
+                ))}
+            </tbody>
+        </table>
 
-        </div>
     )
 }
