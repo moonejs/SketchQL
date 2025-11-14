@@ -1,69 +1,20 @@
-import { useState, useCallback } from 'react';
-import { ReactFlow,Background, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
-
-
-
-
-import NavBar from './Navbar/NavBar'
-import TableNode from './TableNode';
-
-const nodeTypes = {
-  tableNode: TableNode,
-};
-
-
-const initialNodes = [
-  {
-    id: '1',
-    type: 'tableNode', 
-    position: { x: 50, y: 50 },
-    data: {
-      label: 'User',
-      columns: [
-        { name: 'id', type: 'INT' },
-        { name: 'username', type: 'VARCHAR' },
-        { name: 'email', type: 'VARCHAR' }
-      ]
-    }
-  },
-];
-const initialEdges = [];
- 
-export default function App() {
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
- 
-  const onNodesChange = useCallback(
-    (changes) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-    [],
-  );
-  const onEdgesChange = useCallback(
-    (changes) => setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-    [],
-  );
-  const onConnect = useCallback(
-    (params) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
-    [],
-  );
- 
-  return (
+import Table from "./DbDesign/Table"
+import NavBar from "./Navbar/NavBar"
+import Sidebar from "./SideBar/Sidebar"
+export default function App(){
+  return(
     <div className="d-flex flex-column vh-100">
-      <NavBar/>
-    <div style={{ width: '100vw', height: '100vh' }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        fitView
-        >
-        <Background/>
-      </ReactFlow>
-      
+      <NavBar></NavBar>
+      <div className=" container-fluid flex-grow-1 p-0 overflow-hidden">
+        <div className="row h-100 g-0">
+          <div className="col-3 ">
+            <Sidebar></Sidebar>
+          </div>
+          <div className="col-9">
+            <Table></Table>
+          </div>
+        </div>
+      </div>
     </div>
-    </div>
-  );
-}
+  )
+}   

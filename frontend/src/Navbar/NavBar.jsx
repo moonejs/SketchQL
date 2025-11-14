@@ -1,6 +1,6 @@
-function NavBar(){
+export default function NavBar(){
     return(
-        <nav className="navbar navbar-dark bg-primary shadow-sm">
+        <nav className="container-fluid navbar navbar-expand-lg bg-info-subtle">
             <div className="container-fluid">
                 <span className="navbar-brand mb-0 h1">My DB Visualizer</span>
                 <div className="d-flex gap-2">
