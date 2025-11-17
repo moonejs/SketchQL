@@ -14,7 +14,7 @@ export default function Sidebar(){
             ):(
                 nodes.map((node)=>(
                     <SidebarTableEdit key={node.id} 
-                    label={node.data.label}
+                    node={node}
                     />
 
                 ))

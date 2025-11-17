@@ -18,8 +18,27 @@ export const useStore=create((set,get)=>({
         },
     ],
     edges: [],
-    
+    selectedNodeId: null,
+    setSelectedNode:(nodeId)=>{
+        set({selectedNodeId:nodeId});
+    },
 
+    updateNodeLabel:(nodeId,newLabel)=>{
+        set({
+            nodes:get().nodes.map((node)=>{
+                if(node.id==nodeId){
+                    return {
+                        ...node,
+                        data:{
+                            ...node.data,
+                            label:newLabel
+                        }
+                    }
+                }
+                return node;
+            })
+        })
+    },
 
 
 
