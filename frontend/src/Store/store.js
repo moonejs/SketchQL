@@ -18,6 +18,13 @@ export const useStore=create((set,get)=>({
         },
     ],
     edges: [],
+    
+
+
+
+
+
+
     onNodesChange: (changes) => {
         set({
             nodes: applyNodeChanges(changes, get().nodes),
@@ -41,7 +48,7 @@ export const useStore=create((set,get)=>({
         const newNode = {
             id: newTableId,
             type: 'tableNode',
-            position: { x: 100, y: 100 },
+            position: { x: 20, y: 100 },
             data: {
                 label: `New Table ${currentNodes.length + 1}`,
                 columns: [{ name: 'id', type: 'INT' }]
