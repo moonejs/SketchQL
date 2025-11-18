@@ -39,11 +39,82 @@ export const useStore=create((set,get)=>({
             })
         })
     },
+    addColumn:(nodeId)=>{
+        set({
+            nodes:get().nodes.map((node)=>{
+                if(nodeId==node.id){
+                    const newCol={
+                        name:`new_col_${node.data.columns.length + 1}`,
+                        type: 'VARCHAR',
+                    }
+                    return{
+                        ...node,
+                        data:{
+                            ...node.data,
+                            columns:[...node.data.columns,newCol]   
+                        }
+                    }
+                }
+                return node;
+            })
+        })
+    },
+    updateColumn:(nodeId,columnIndex,field,value)=>{
+        set({
+            nodes:get().nodes.map((node)=>{
+                if(nodeId==node.id){
+                    const newColumns=node.data.columns.map((col,idx)=>{
+                        if(idx==columnIndex){
+                            return{
+                                ...col,
+                                [field]:value,
+                            }
+                        }
+                        return col
+                    })
+                    return{
+                        ...node,
+                        data:{
+                            ...node.data,
+                            columns:newColumns
+                        }
+                    }
+                }
+                return node;
+            })
+        })
+    },
+    deleteColumn:(nodeId,colIndex)=>{
+        set({
+            nodes:get().nodes.map((node)=>{
+                if(nodeId==node.id){
+                    const newColumns=node.data.columns.filter((col,idx)=>{
+                        return idx!=colIndex
+                    })
+                    return{
+                        ...node,
+                        data:{
+                            ...node.data,
+                            columns:newColumns
+                        }
+                    }
+                }
+                return node
+            })
+        })
+    },
 
-
-
-
-
+    deleteTable:(nodeId)=>{
+        set({
+            nodes:get().nodes.filter((node)=>node.id!=nodeId),
+            edges:get().edges.filter((edge)=>{
+                edge.source !== nodeId && edge.target !== nodeId
+            }),
+            selectedNodeId: get().selectedNodeId === nodeId 
+            ? null 
+            :get().selectedNodeId,
+        })
+    },
     onNodesChange: (changes) => {
         set({
             nodes: applyNodeChanges(changes, get().nodes),
