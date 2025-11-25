@@ -1,5 +1,5 @@
 import SidebarHeading from "./SidebarHeading.jsx";
-import { useStore } from '../Store/store';
+import { useStore } from '../../Store/store';
 import SidebarTableEdit from "./SidebarTableEdit.jsx";
 import SidebarEdgeEdit from "./SidebarEdgeEdit.jsx";
 

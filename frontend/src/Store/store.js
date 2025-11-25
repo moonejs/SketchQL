@@ -3,7 +3,17 @@ import { applyNodeChanges, applyEdgeChanges, addEdge, MarkerType } from '@xyflow
 
 import { persist, createJSONStorage } from 'zustand/middleware';
 export const DATA_TYPES = ['INT', 'BIGINT', 'VARCHAR', 'TEXT', 'DATE', 'DATETIME', 'BOOLEAN', 'FLOAT'];
-
+const INITIAL_NODES = [
+    {
+        id: '1',
+        type: 'tableNode',
+        position: { x: 100, y: 100 },
+        data: {
+            label: 'Users',
+            columns: [{ name: 'id', type: 'INT', isPK: true, isNullable: false }]
+        }
+    }
+];
 export const useStore=create(
     persist(
         (set,get)=>({
@@ -25,6 +35,16 @@ export const useStore=create(
         edges: [],
         selectedNodeId: null,
         selectedEdgeId:null,
+        currentProjectId: null,
+        projectName: 'Untitled Diagram',
+        loadProject: (project) => {
+                set({
+                    nodes: project.nodes || [],
+                    edges: project.edges || [],
+                    currentProjectId: project._id,
+                    projectName: project.name
+                });
+            },
         setSelectedNode:(nodeId)=>{
             set({
                 selectedNodeId:nodeId,
@@ -53,6 +73,17 @@ export const useStore=create(
                 })
             })
         },
+        resetCanvas: () => {
+            set({
+                nodes: INITIAL_NODES, 
+                edges: [],
+                currentProjectId: null,
+                projectName: 'Untitled Diagram',
+                selectedNodeId: null,
+                selectedEdgeId: null
+            });
+        },
+        setProjectName: (name) => set({ projectName: name }),
         addColumn:(nodeId)=>{
             set({
                 nodes:get().nodes.map((node)=>{

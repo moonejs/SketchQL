@@ -1,4 +1,4 @@
-import { useStore, DATA_TYPES } from '../Store/store';
+import { useStore, DATA_TYPES } from '../../Store/store';
 
 export default function SidebarTableEdit({ node }) {
     const selectedNodeId = useStore((state) => state.selectedNodeId);

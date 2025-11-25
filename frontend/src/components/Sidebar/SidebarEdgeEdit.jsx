@@ -1,4 +1,4 @@
-import { useStore } from '../Store/store';
+import { useStore } from '../../Store/store';
 
 
 export default function SidebarEdgeEdit({edge}){

@@ -1,20 +1,44 @@
-import Table from "./DbDesign/Table"
-import NavBar from "./Navbar/NavBar"
-import Sidebar from "./SideBar/Sidebar"
-export default function App(){
-  return(
-    <div className="d-flex flex-column vh-100">
-      <NavBar></NavBar>
-      <div className=" container-fluid flex-grow-1 p-0 overflow-hidden">
-        <div className="row h-100 g-0">
-          <div className="col-3 ">
-            <Sidebar></Sidebar>
-          </div>
-          <div className="col-9">
-            <Table></Table>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}   
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register'; 
+import AuthCallback from './pages/Auth/AuthCallback';
+import DbDesigner from './pages/Designer/DbDesigner';
+import Dashboard from './pages/Dashboard/Dashboard';
+import { useAuthStore } from './Store/authStore';
+
+const ProtectedRoute = ({ children }) => {
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+    return children;
+};
+
+export default function App() {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                
+                <Route path="/" element={<AuthCallback />} />
+                <Route 
+                    path="/dashboard" 
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    } 
+                />
+                <Route 
+                    path="/design" 
+                    element={
+                        <ProtectedRoute>
+                            <DbDesigner />
+                        </ProtectedRoute>
+                    } 
+                />
+            </Routes>
+        </BrowserRouter>
+    );
+}

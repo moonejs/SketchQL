@@ -3,7 +3,7 @@
   import '@xyflow/react/dist/style.css';
 
   import TableNode from './TableNode';
-  import { useStore } from '../Store/store';
+  import { useStore } from '../../Store/store';
 
   const nodeTypes = {
     tableNode: TableNode,
