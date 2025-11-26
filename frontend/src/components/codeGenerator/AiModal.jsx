@@ -21,25 +21,39 @@ export default function AiModal({ isOpen, onClose }) {
                 { userPrompt: prompt },
                 { headers: { 'auth-token': token } }
             );
-            const repairedEdges = res.data.edges.map(edge => ({
-                ...edge,
-               
-                sourceHandle: edge.sourceHandle.includes('-right') ? edge.sourceHandle : `${edge.sourceHandle.replace('-source', '')}-right`,
-                targetHandle: edge.targetHandle.includes('-left') ? edge.targetHandle : `${edge.targetHandle.replace('-target', '')}-left`,
-                type: 'smoothstep',
-                animated: true, 
-                markerEnd: { type: 'arrowclosed' }
-            }));
+            const repairedEdges = res.data.edges.map(edge => {
+                const cleanSourceCol = edge.sourceHandle
+                    .replace('-source', '')
+                    .replace('-right', '')
+                    .replace('-left', '');
+                
+                const cleanTargetCol = edge.targetHandle
+                    .replace('-target', '')
+                    .replace('-left', '')
+                    .replace('-right', '');
+
+                return {
+                    ...edge,
+                    
+                    sourceHandle: `${cleanSourceCol}-right`, 
+                    targetHandle: `${cleanTargetCol}-left`,
+                    type: 'smart',
+                    animated: false,
+                    style: { stroke: '#b1b1b7', strokeWidth: 2 },
+                    markerEnd: { type: 'arrowclosed' },
+                    markerEnd: { type: 'arrowclosed', color: '#b1b1b7' }
+                };
+            });
             const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
                 res.data.nodes, 
                 repairedEdges 
-            )
+            );
 
             
             loadProject({
     _id: null, 
     name: `AI: ${prompt.substring(0, 15)}...`,
-    nodes: layoutedNodes, // Use the calculated nodes
+    nodes: layoutedNodes, 
     edges: layoutedEdges
 });
 

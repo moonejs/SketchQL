@@ -1,14 +1,16 @@
   import { useState, useCallback } from 'react';
   import { ReactFlow,Background, Controls, MiniMap } from '@xyflow/react';
   import '@xyflow/react/dist/style.css';
-
+import { SmartStepEdge } from '@tisoap/react-flow-smart-edge';
   import TableNode from './TableNode';
   import { useStore } from '../../Store/store';
 
   const nodeTypes = {
     tableNode: TableNode,
   };
-
+const edgeTypes = {
+  smart: SmartStepEdge
+};
 
   export default function Table() {
   const nodes = useStore((state) => state.nodes);
@@ -28,6 +30,7 @@
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           fitView
           onEdgeClick={(event, edge) => {
               setSelectedEdge(edge.id);

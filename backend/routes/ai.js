@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const fetchUser = require('../middleware/fetchUser'); 
 
-// Ensure API Key is loaded
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 router.post('/generate', fetchUser, async (req, res) => {
@@ -21,11 +21,11 @@ router.post('/generate', fetchUser, async (req, res) => {
         const systemPrompt = `
         You are a Database Architect. 
         The user will describe an application. You must design the database schema.
-        
+
         User Description: "${userPrompt}"
 
         You MUST return a single JSON object with exactly two arrays: "nodes" and "edges".
-        
+
         1. "nodes" format (React Flow):
         {
           "id": "table_1",
@@ -34,30 +34,34 @@ router.post('/generate', fetchUser, async (req, res) => {
           "data": {
             "label": "TableName",
             "columns": [
-               { "name": "id", "type": "INT", "isPK": true, "isNullable": false },
-               { "name": "column_name", "type": "VARCHAR", "isPK": false, "isNullable": true }
+              { "name": "id", "type": "INT", "isPK": true, "isNullable": false },
+              { "name": "user_id", "type": "INT", "isPK": false, "isNullable": true } 
             ]
           }
         }
-        
+
         2. "edges" format (Relationships):
         {
           "id": "e1-2",
-          "source": "table_1",
-          "target": "table_2",
-          "sourceHandle": "column_name-left", 
-          "targetHandle": "column_name-right",
+          "source": "table_1", // The table WITH the Foreign Key
+          "target": "table_2", // The table WITH the Primary Key
+          
+          // CRITICAL: Handles must match frontend components exactly
+          "sourceHandle": "user_id-right",  // The Foreign Key column name + "-right"
+          "targetHandle": "id-left",        // The Primary Key column name + "-left"
+          
           "type": "smoothstep", 
           "animated": true,
+          "markerEnd": { "type": "arrowclosed" },
           "data": { "label": "1:N" }
         }
 
         IMPORTANT RULES:
-        - "sourceHandle" MUST match a column name in the source table + "-left" (e.g., "user_id-left").
-        - "targetHandle" MUST match a column name in the target table + "-right" (e.g., "id-right").
-        - Spread the nodes out visually (increment x by 350, y by 0 for each new table) so they don't overlap.
-        - Always include Primary Keys (id).
-        - Infer relationships intelligently.
+        - Create tables based on the user description.
+        - ALWAYS generate edges for relationships.
+        - The "sourceHandle" MUST be the Foreign Key column name ending in "-right".
+        - The "targetHandle" MUST be the Primary Key column name (usually "id") ending in "-left".
+        - Ensure the Foreign Key column actually exists in the source node's columns list.
         - RESPONSE MUST BE RAW JSON.
         `;
 
@@ -65,12 +69,10 @@ router.post('/generate', fetchUser, async (req, res) => {
         const response = await result.response;
         let text = response.text();
         
-        // --- CRITICAL FIX: CLEAN THE OUTPUT ---
-        // Sometimes Gemini adds markdown backticks (```json ... ```). We must remove them.
+  
         text = text.replace(/```json/g, '').replace(/```/g, '').trim();
 
-        // Log the raw text to debug if it fails again
-        console.log("Gemini Raw Output:", text);
+      
 
         const jsonResult = JSON.parse(text);
         
