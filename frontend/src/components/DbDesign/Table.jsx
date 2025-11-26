@@ -1,5 +1,5 @@
   import { useState, useCallback } from 'react';
-  import { ReactFlow,Background, Controls, MiniMap } from '@xyflow/react';
+  import { ReactFlow,Background, Controls, MiniMap,StepEdge,addEdge} from '@xyflow/react';
   import '@xyflow/react/dist/style.css';
 import { SmartStepEdge } from '@tisoap/react-flow-smart-edge';
   import TableNode from './TableNode';
@@ -9,7 +9,18 @@ import { SmartStepEdge } from '@tisoap/react-flow-smart-edge';
     tableNode: TableNode,
   };
 const edgeTypes = {
-  smart: SmartStepEdge
+  step: StepEdge,
+  smart: StepEdge,
+};
+const defaultEdgeOptions = {
+    type: 'step', 
+    style: { 
+        strokeWidth: 2, 
+        stroke: '#b1b1b7',
+        cursor: 'pointer' 
+    },
+    interactionWidth: 25, 
+    markerEnd: { type: 'arrowclosed', color: '#b1b1b7' },
 };
 
   export default function Table() {
@@ -20,6 +31,7 @@ const edgeTypes = {
     const onConnect = useStore((state) => state.onConnect);
     const setSelectedEdge = useStore((state) => state.setSelectedEdge);
     const deleteEdge = useStore((state) => state.deleteEdge);
+    const setSelectedNode = useStore((state) => state.setSelectedNode);
     return (
 
       <div style={{ width: '100%', height: '100%' }}>
@@ -31,11 +43,20 @@ const edgeTypes = {
           onConnect={onConnect}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
+          defaultEdgeOptions={defaultEdgeOptions}
           fitView
           onEdgeClick={(event, edge) => {
+            event.stopPropagation();
+            console.log("Edge Clicked:", edge.id)
               setSelectedEdge(edge.id);
               
               event.stopPropagation(); 
+              
+          }}
+          onNodeClick={(event, node) => {
+   
+          setSelectedNode(node.id);
+    
           }}
           onPaneClick={() => setSelectedEdge(null)}
           onEdgesDelete={(edgesToDelete) => {
@@ -44,6 +65,7 @@ const edgeTypes = {
                 deleteEdge(edgesToDelete[0].id);
             }
         }}
+
           >
           <Background gap={12} size={1} />
           <Controls />

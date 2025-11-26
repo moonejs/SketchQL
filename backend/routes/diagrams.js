@@ -69,5 +69,18 @@ router.delete('/delete/:id', fetchUser, async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+router.get('/shared/:id', async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id);
+        if (!project) {
+            return res.status(404).send("Diagram not found");
+        }
+        // We return the project regardless of who owns it
+        res.json(project);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 module.exports = router;

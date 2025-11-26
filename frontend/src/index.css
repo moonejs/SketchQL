@@ -1,0 +1,11 @@
+/* Make selected edges turn Blue and thicker */
+.react-flow__edge.selected .react-flow__edge-path {
+    stroke: #0d6efd !important; /* Bootstrap Primary Blue */
+    stroke-width: 3px !important;
+    filter: drop-shadow(0 0 2px rgba(13, 110, 253, 0.5));
+}
+
+/* Ensure the arrow head also turns blue */
+.react-flow__edge.selected .react-flow__arrowhead {
+    fill: #0d6efd !important;
+}

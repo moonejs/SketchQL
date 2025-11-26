@@ -201,12 +201,14 @@ export const useStore=create(
             set({
                 edges: addEdge({
                     ...connection,
-                    type:'smoothstep',
-                    animated:true,
+                    type:'step',
+                    animated:false,
+                    style: { stroke: '#b1b1b7', strokeWidth: 2 },
                     markerEnd:{
                         type:MarkerType.ArrowClosed,
                         width:20,
                         height:20,
+                        color: '#b1b1b7',
                     },
                     data:{label:'1:N'}
                 },get().edges),

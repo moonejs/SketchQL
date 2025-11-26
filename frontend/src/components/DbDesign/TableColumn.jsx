@@ -2,7 +2,7 @@ import { Position, Handle } from '@xyflow/react';
 
 export default function TableColumn({ col }) {
     return (
-        <tr className="column-row">
+        <tr className="column-row position-relative">
 
             <th className="p-2 position-relative text-start" style={{ minWidth: '120px' }}>
                 <Handle 
@@ -10,6 +10,12 @@ export default function TableColumn({ col }) {
                     position={Position.Left} 
                     id={`${col.name}-left`} 
                     className="column-handle"
+                    style={{ 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        left: '-8px', 
+                        background: '#555' 
+                    }}
                 />
                 
                 <div className="d-flex align-items-center gap-2">
@@ -37,6 +43,12 @@ export default function TableColumn({ col }) {
                     position={Position.Right} 
                     id={`${col.name}-right`} 
                     className="column-handle"
+                    style={{ 
+                        top: '50%', 
+                        transform: 'translateY(-50%)', 
+                        right: '-8px', 
+                        background: '#555' 
+                    }}
                 />
             </td>
         </tr>

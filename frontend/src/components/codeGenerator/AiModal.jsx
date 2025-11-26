@@ -37,7 +37,7 @@ export default function AiModal({ isOpen, onClose }) {
                     
                     sourceHandle: `${cleanSourceCol}-right`, 
                     targetHandle: `${cleanTargetCol}-left`,
-                    type: 'smart',
+                    type: 'step',
                     animated: false,
                     style: { stroke: '#b1b1b7', strokeWidth: 2 },
                     markerEnd: { type: 'arrowclosed' },

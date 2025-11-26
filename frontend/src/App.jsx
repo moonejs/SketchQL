@@ -5,6 +5,7 @@ import AuthCallback from './pages/Auth/AuthCallback';
 import DbDesigner from './pages/Designer/DbDesigner';
 import Dashboard from './pages/Dashboard/Dashboard';
 import { useAuthStore } from './Store/authStore';
+import SharedDiagram from './pages/Designer/SharedDiagram';
 
 const ProtectedRoute = ({ children }) => {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -20,7 +21,7 @@ export default function App() {
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                
+                <Route path="/shared/:id" element={<SharedDiagram />} />
                 <Route path="/" element={<AuthCallback />} />
                 <Route 
                     path="/dashboard" 
@@ -38,6 +39,7 @@ export default function App() {
                         </ProtectedRoute>
                     } 
                 />
+                
             </Routes>
         </BrowserRouter>
     );
