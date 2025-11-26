@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
 
-// Routes
+
 app.use('/api/auth', require('./routes/auth'));
 app.use('/', require('./routes/social'));
 app.use('/api/ai', require('./routes/ai'));

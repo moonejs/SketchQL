@@ -8,7 +8,7 @@ export default function TableColumn({ col }) {
                 <Handle 
                     type="target" 
                     position={Position.Left} 
-                    id={`${col.name}-target`} 
+                    id={`${col.name}-left`} 
                     className="column-handle"
                 />
                 
@@ -35,7 +35,7 @@ export default function TableColumn({ col }) {
                 <Handle 
                     type="source" 
                     position={Position.Right} 
-                    id={`${col.name}-source`} 
+                    id={`${col.name}-right`} 
                     className="column-handle"
                 />
             </td>

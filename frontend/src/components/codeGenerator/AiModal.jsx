@@ -21,10 +21,19 @@ export default function AiModal({ isOpen, onClose }) {
                 { userPrompt: prompt },
                 { headers: { 'auth-token': token } }
             );
+            const repairedEdges = res.data.edges.map(edge => ({
+                ...edge,
+               
+                sourceHandle: edge.sourceHandle.includes('-right') ? edge.sourceHandle : `${edge.sourceHandle.replace('-source', '')}-right`,
+                targetHandle: edge.targetHandle.includes('-left') ? edge.targetHandle : `${edge.targetHandle.replace('-target', '')}-left`,
+                type: 'smoothstep',
+                animated: true, 
+                markerEnd: { type: 'arrowclosed' }
+            }));
             const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-    res.data.nodes, 
-    res.data.edges
-);
+                res.data.nodes, 
+                repairedEdges 
+            )
 
             
             loadProject({

@@ -1,15 +1,15 @@
 
 import dagre from 'dagre'; 
 
-const nodeWidth = 250; 
-const nodeHeight = 300;
+const nodeWidth = 300; 
+const nodeHeight = 600;
 
 export const getLayoutedElements = (nodes, edges) => {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
 
 
-  dagreGraph.setGraph({ rankdir: 'TB', ranksep: 100, nodesep: 80 }); 
+  dagreGraph.setGraph({ rankdir: 'TB', ranksep: 150, nodesep: 100 }); 
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
