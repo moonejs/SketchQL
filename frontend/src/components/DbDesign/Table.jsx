@@ -1,4 +1,4 @@
-  import { useState, useCallback } from 'react';
+  import { useState, useEffect } from 'react';
   import { ReactFlow,Background, Controls, MiniMap,StepEdge,addEdge} from '@xyflow/react';
   import '@xyflow/react/dist/style.css';
 import { SmartStepEdge } from '@tisoap/react-flow-smart-edge';
@@ -32,6 +32,25 @@ const defaultEdgeOptions = {
     const setSelectedEdge = useStore((state) => state.setSelectedEdge);
     const deleteEdge = useStore((state) => state.deleteEdge);
     const setSelectedNode = useStore((state) => state.setSelectedNode);
+    const nodeToFocus = useStore((state) => state.nodeToFocus);
+    const setNodeToFocus = useStore((state) => state.setNodeToFocus);
+    const [rfInstance, setRfInstance] = useState(null);
+    useEffect(() => {
+        if (nodeToFocus && rfInstance) {
+            const node = nodes.find((n) => n.id === nodeToFocus);
+            if (node) {
+                // Smoothly animate the camera to the new node
+                // zoom: 1 ensures it's readable, duration: 800 makes it smooth
+                rfInstance.setCenter(
+                    node.position.x + 150, // Offset to center the table (width/2)
+                    node.position.y + 150, // Offset to center (height/2)
+                    { zoom: 1, duration: 1000 }
+                );
+                // Reset the signal so we don't get stuck
+                setNodeToFocus(null);
+            }
+        }
+    }, [nodeToFocus, rfInstance, nodes, setNodeToFocus]);
     return (
 
       <div style={{ width: '100%', height: '100%' }}>
@@ -45,6 +64,7 @@ const defaultEdgeOptions = {
           edgeTypes={edgeTypes}
           defaultEdgeOptions={defaultEdgeOptions}
           fitView
+          onInit={setRfInstance}
           onEdgeClick={(event, edge) => {
             event.stopPropagation();
             console.log("Edge Clicked:", edge.id)

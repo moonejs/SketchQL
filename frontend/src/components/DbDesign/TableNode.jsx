@@ -4,7 +4,7 @@ import TableColumn from './TableColumn';
 export default function TableNode({data}){
     return(
         <table className="table table-bordered table-sm m-0 ">
-            <TableHeading label={data.label}/>
+            <TableHeading label={data.label} color={data.color}/>
             <tbody>
                 {data.columns.map((col,index)=>(
                     <TableColumn col={col} key={index}/>

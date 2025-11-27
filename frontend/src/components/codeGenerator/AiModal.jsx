@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useStore } from '../../Store/store';
+import { useStore,getTableColor } from '../../Store/store';
 import { useAuthStore } from '../../Store/authStore';
 import { getLayoutedElements } from '../../utils/autoLayout';
+
 export default function AiModal({ isOpen, onClose }) {
     const [prompt, setPrompt] = useState('');
     const [loading, setLoading] = useState(false);
@@ -48,12 +49,20 @@ export default function AiModal({ isOpen, onClose }) {
                 res.data.nodes, 
                 repairedEdges 
             );
+            const coloredNodes = layoutedNodes.map((node, index) => ({
+                ...node,
+                data: {
+                    ...node.data,
+                    // Assign a unique color based on the index
+                    color: getTableColor(index) 
+                }
+            }));
 
             
             loadProject({
     _id: null, 
     name: `AI: ${prompt.substring(0, 15)}...`,
-    nodes: layoutedNodes, 
+    nodes: coloredNodes,
     edges: layoutedEdges
 });
 

@@ -6,6 +6,7 @@ import DbDesigner from './pages/Designer/DbDesigner';
 import Dashboard from './pages/Dashboard/Dashboard';
 import { useAuthStore } from './Store/authStore';
 import SharedDiagram from './pages/Designer/SharedDiagram';
+import NotFound from './pages/NotFound';
 
 const ProtectedRoute = ({ children }) => {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -39,7 +40,7 @@ export default function App() {
                         </ProtectedRoute>
                     } 
                 />
-                
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
     );

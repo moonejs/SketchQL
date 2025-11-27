@@ -3,6 +3,23 @@ import { applyNodeChanges, applyEdgeChanges, addEdge, MarkerType } from '@xyflow
 
 import { persist, createJSONStorage } from 'zustand/middleware';
 export const DATA_TYPES = ['INT', 'BIGINT', 'VARCHAR', 'TEXT', 'DATE', 'DATETIME', 'BOOLEAN', 'FLOAT'];
+
+const hslToHex = (h, s, l) => {
+  l /= 100;
+  const a = s * Math.min(l, 1 - l) / 100;
+  const f = n => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color).toString(16).padStart(2, '0');
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
+};
+export const getTableColor = (index) => {
+    
+    const hue = (index * 137.508) % 360; 
+   
+    return hslToHex(hue, 65, 45);
+};
 const INITIAL_NODES = [
     {
         id: '1',
@@ -10,7 +27,8 @@ const INITIAL_NODES = [
         position: { x: 100, y: 100 },
         data: {
             label: 'Users',
-            columns: [{ name: 'id', type: 'INT', isPK: true, isNullable: false }]
+            columns: [{ name: 'id', type: 'INT', isPK: true, isNullable: false }],
+            color: getTableColor(0)
         }
     }
 ];
@@ -244,22 +262,79 @@ export const useStore=create(
                 selectedEdgeId:null
             })
         },
-        addNewTable:()=>{
-            const currentNodes=get().nodes;
-            const newTableId = `table_${Date.now()}`;
-            const newNode = {
-                id: newTableId,
-                type: 'tableNode',
-                position: { x: 100, y: 100 },
-                data: {
-                    label: `New Table ${currentNodes.length + 1}`,
-                    columns: [{ name: 'id', type: 'INT',isPK: true, isNullable: false }]
+        updateNodeColor: (nodeId, color) => {
+        set({
+            nodes: get().nodes.map((node) => {
+                if (node.id === nodeId) {
+                    // Update the color property inside data
+                    return { ...node, data: { ...node.data, color: color } };
                 }
-            };
-            set({
-                nodes: [...currentNodes, newNode]
-            });
+                return node;
+            })
+        });
         },
+
+
+        
+        nodeToFocus: null, 
+        setNodeToFocus: (id) => set({ nodeToFocus: id }),
+        addNewTable: () => {
+        const currentNodes = get().nodes;
+        const newTableId = `table_${Date.now()}`;
+        const nextColor = getTableColor(currentNodes.length);;
+
+        // 1. GRID CONFIGURATION (3 Columns)
+        const startX = 50;
+        const startY = 50;
+        const colWidth = 400; // Slightly wider to avoid overlap
+        const rowHeight = 500; 
+        const maxCols = 3;    // <--- CHANGED TO 3 COLUMNS
+
+        let newX = startX;
+        let newY = startY;
+        let slotFound = false;
+        let index = 0;
+
+        // 2. Find the first empty slot
+        while (!slotFound) {
+            const row = Math.floor(index / maxCols);
+            const col = index % maxCols;
+            
+            const candidateX = startX + (col * colWidth);
+            const candidateY = startY + (row * rowHeight);
+
+            // Simple collision check
+            const isOccupied = currentNodes.some(n => 
+                Math.abs(n.position.x - candidateX) < 100 && 
+                Math.abs(n.position.y - candidateY) < 100
+            );
+
+            if (!isOccupied) {
+                newX = candidateX;
+                newY = candidateY;
+                slotFound = true;
+            }
+            index++;
+        }
+
+        const newNode = {
+            id: newTableId,
+            type: 'tableNode',
+            position: { x: newX, y: newY },
+            data: {
+                label: `New Table ${currentNodes.length + 1}`,
+                columns: [{ name: 'id', type: 'INT', isPK: true, isNullable: false }],
+                color: nextColor
+            }
+        };
+        
+        set({
+            nodes: [...currentNodes, newNode],
+            selectedNodeId: newTableId, 
+            selectedEdgeId: null,
+            nodeToFocus: newTableId // <--- TRIGGER THE CAMERA FOCUS
+        });
+    },
         clearCanvas: () => {
             if(window.confirm("Are you sure you want to clear the entire diagram? This cannot be undone.")){
                 set({

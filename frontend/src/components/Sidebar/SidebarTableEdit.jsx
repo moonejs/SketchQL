@@ -11,7 +11,8 @@ export default function SidebarTableEdit({ node }) {
     const setPrimaryKey = useStore((state) => state.setPrimaryKey);
 
     const isSelected = selectedNodeId === node.id;
-    
+    const updateNodeColor = useStore((state) => state.updateNodeColor);
+    const PRESET_COLORS = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#6610f2', '#fd7e14', '#20c997', '#343a40'];
     const handleLabelChange = (e) => {
         updateNodeLabel(node.id, e.target.value);
     };
@@ -39,6 +40,37 @@ export default function SidebarTableEdit({ node }) {
                             onChange={handleLabelChange}
                         />
                     </div>
+                    <div className="mb-3">
+                    <label className="form-label fw-bold small text-muted">Table Color</label>
+                    <div className="d-flex align-items-center gap-2 flex-wrap">
+                        {/* Custom Color Picker */}
+                        <input 
+                            type="color" 
+                            className="form-control form-control-color form-control-sm" 
+                            value={node.data.color || '#0d6efd'}
+                            onChange={(e) => updateNodeColor(node.id, e.target.value)}
+                            title="Custom Color"
+                        />
+                        
+                        {/* Preset Dots */}
+                        {PRESET_COLORS.map((c) => (
+                            <div 
+                                key={c}
+                                onClick={() => updateNodeColor(node.id, c)}
+                                style={{ 
+                                    width: '20px', 
+                                    height: '20px', 
+                                    backgroundColor: c, 
+                                    cursor: 'pointer', 
+                                    borderRadius: '50%',
+                                    border: node.data.color === c ? '2px solid #333' : '1px solid #ddd',
+                                    transition: 'transform 0.1s'
+                                }}
+                                title={c}
+                            />
+                        ))}
+                    </div>
+                </div>
                     <div className="col-5 d-flex align-items-end justify-content-end">
                         <button
                             className="btn btn-sm btn-outline-danger"

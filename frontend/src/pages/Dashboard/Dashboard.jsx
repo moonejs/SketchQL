@@ -26,6 +26,11 @@ export default function Dashboard() {
         } catch (err) {
             console.error("Error fetching projects:", err);
             
+           
+            if (err.response && err.response.status === 401) {
+                logout();
+                navigate('/login');
+            }
         } finally {
             setLoading(false);
         }
