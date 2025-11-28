@@ -1,11 +1,100 @@
-/* Make selected edges turn Blue and thicker */
-.react-flow__edge.selected .react-flow__edge-path {
-    stroke: #0d6efd !important; /* Bootstrap Primary Blue */
-    stroke-width: 3px !important;
-    filter: drop-shadow(0 0 2px rgba(13, 110, 253, 0.5));
+:root{
+    --main-color:#f875aa;
+    --main-color-hover:#e95c94;
 }
 
-/* Ensure the arrow head also turns blue */
-.react-flow__edge.selected .react-flow__arrowhead {
-    fill: #0d6efd !important;
+.main-primary-color{
+    background-color: var(--main-color);
+}
+.main-bg-color-1{
+    background-color: #f1f5f9;
+}
+.main-bg-grad {
+    background: linear-gradient(to bottom, #ffffff 0%, #f1f5f9 100%);
+    
+}
+.main-bg-grad-2 {
+    background: linear-gradient(to bottom,#f1f5f9 0%, #ffffff 100%);
+    
+}
+.main-text-color{
+    color: #64748b;
+}
+.main-text-primary-color{
+    color: var(--main-color);
+}
+.btn-hover-color:hover{
+    background-color: var(--main-color-hover);
+}
+.text-hover:hover{
+    color: black;
+}
+.btn-hover-text1:hover{
+    color: var(--main-color-hover);
+}
+
+.heading-fs{
+    font-size: 8vh;
+    font-weight: 900;
+}
+
+.subHeading-w1{
+    width: 55vw;
+    margin-left: 18.5vw;
+}
+.subHeading-w2{
+    width: 55vw;
+    margin-left: 22vw;
+}
+.subHeading-w3{
+    width: 36vw;
+}
+.subHeading-w4{
+    width: 22vw;
+}
+.img-1{
+    width: 75vw;
+    height: 85vh;
+}
+.img-2{
+    width: 15vw;
+    height: 9vh;
+    filter: grayscale(100%);
+    opacity: 0.5;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+.img-2:hover{
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+}
+.price-card{
+    height: 70vh;
+    width: 25vw;
+}
+.price-card-upper{
+    height: 12px;
+    width: 25vw;
+
+}
+.high-1{
+    height: 6px;
+}
+
+.new-color1{
+    background-color: var(--main-color);
+}
+.footer-color{
+    background-color: #1E293B;
+}
+.footer-text{
+    color: var(--main-color);
+}
+.footer-text2{
+    cursor: pointer;
+}
+.footer-text2:hover{
+    cursor: pointer;
+    color: white;
 }

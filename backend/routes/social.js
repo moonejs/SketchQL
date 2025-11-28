@@ -7,7 +7,7 @@ const handleSocialLogin = (req, res) => {
     const user = req.user;
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
     
-    res.redirect(`${process.env.FRONTEND_URL}?token=${token}&username=${user.username}&userId=${user._id}`);
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}&username=${user.username}&userId=${user._id}`);
 };
 
 

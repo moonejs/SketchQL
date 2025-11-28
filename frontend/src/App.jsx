@@ -8,6 +8,8 @@ import { useAuthStore } from './Store/authStore';
 import SharedDiagram from './pages/Designer/SharedDiagram';
 import NotFound from './pages/NotFound';
 
+import LandingPage from './pages/Landing/LandingPage';
+
 const ProtectedRoute = ({ children }) => {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     if (!isAuthenticated) {
@@ -20,10 +22,12 @@ export default function App() {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path='/' element={<LandingPage/>}/>
+                <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/shared/:id" element={<SharedDiagram />} />
-                <Route path="/" element={<AuthCallback />} />
+                
                 <Route 
                     path="/dashboard" 
                     element={

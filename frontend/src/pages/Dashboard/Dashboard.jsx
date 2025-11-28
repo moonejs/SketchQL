@@ -68,7 +68,7 @@ export default function Dashboard() {
                 <span className="navbar-brand fw-bold text-primary">My DB Visualizer</span>
                 <div className="ms-auto d-flex gap-3 align-items-center">
                     <span className="fw-bold text-dark">Hi, {user?.username}</span>
-                    <button className="btn btn-outline-danger btn-sm" onClick={() => { logout(); navigate('/login'); }}>Logout</button>
+                    <button className="btn btn-outline-danger btn-sm" onClick={() => { logout(); navigate('/'); }}>Logout</button>
                 </div>
             </nav>
 
