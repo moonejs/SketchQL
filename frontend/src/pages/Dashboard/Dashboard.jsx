@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../Store/authStore';
-import { useStore } from '../../Store/store'; 
-import NavBar from '../../components/Navbar/NavBar'; 
+import DashNav from "./DashNav"
+import Heading from "../../components/Landing/components/Heading"
+import Btn from "../../components/Landing/components/Btn"
+import db from "../../assets/db.png"
 
-export default function Dashboard() {
-    const navigate = useNavigate();
+import { useEffect,useState } from "react"
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
+import { useAuthStore } from "../../Store/authStore"
+import { useStore } from "../../Store/store";
+
+export default function Dashboard(){
+    const navigate=useNavigate();
     const { token, user, logout } = useAuthStore();
     const { loadProject, resetCanvas } = useStore();
-    
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchProjects();
+            fetchProjects();
     }, []);
 
     const fetchProjects = async () => {
@@ -29,18 +32,16 @@ export default function Dashboard() {
            
             if (err.response && err.response.status === 401) {
                 logout();
-                navigate('/login');
+                navigate('/');
             }
         } finally {
             setLoading(false);
         }
     };
-
     const handleCreateNew = () => {
         resetCanvas(); 
         navigate('/design'); 
     };
-
     const handleOpenProject = (project) => {
         loadProject(project); 
         navigate('/design');
@@ -59,89 +60,74 @@ export default function Dashboard() {
         } catch (err) {
             alert("Failed to delete project");
         }
-    }
+    }    
 
-    return (
-        <div className="vh-100 bg-light d-flex flex-column">
-             
-             <nav className="navbar navbar-expand-lg bg-white border-bottom px-4">
-                <span className="navbar-brand fw-bold text-primary">My DB Visualizer</span>
-                <div className="ms-auto d-flex gap-3 align-items-center">
-                    <span className="fw-bold text-dark">Hi, {user?.username}</span>
-                    <button className="btn btn-outline-danger btn-sm" onClick={() => { logout(); navigate('/'); }}>Logout</button>
+
+
+    return(
+        <div className="container-fluid p-0 h-100vh ">
+            <div className="bg-black dashboard-h ">
+                <div className="">
+                    <DashNav userName={user?.username} onClick={() => { logout(); navigate('/')}}/>
                 </div>
-            </nav>
-
-            <div className="container-fluid flex-grow-1">
-                <div className="row h-100">
-                   
-                    <div className="col-2 bg-white border-end py-4">
-                        <div className="list-group list-group-flush">
-                            <button className="list-group-item list-group-item-action border-0 active rounded">
-                                <i className="bi bi-database me-2"></i> My diagrams
-                            </button>
-                            <button className="list-group-item list-group-item-action border-0 text-muted">
-                                <i className="bi bi-share me-2"></i> Shared with me
-                            </button>
-                        </div>
-                    </div>
-
+                
+                <div className="  borderc bg-light p-4 mt-5 container rounded-1 vh-50vh">
                     
-                    <div className="col-10 py-4 px-5">
-                        <div className="d-flex justify-content-between align-items-center mb-4">
-                            <h3 className="fw-bold text-dark">My diagrams</h3>
-                            <button className="btn btn-primary" onClick={handleCreateNew}>
-                                <i className="bi bi-plus-lg me-2"></i> New Diagram
-                            </button>
-                        </div>
-
-                        {loading ? (
-                            <div className="text-center mt-5"><div className="spinner-border text-primary"></div></div>
-                        ) : (
-                            <div className="row g-4">
-                                {projects.length === 0 && (
+                    <div className=" border-bottom pb-3 d-flex justify-content-between align-items-center">
+                        <Heading className={"fs-4 fw-bold"} word={"My Diagrams"}/>
+                        <Btn word={"New Diagram"} className={"main-primary-color btn-hover-color text-white"}
+                        onClick={handleCreateNew} icon={<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>}/>
+                    </div>
+                    {loading ? (
+                        <div className="text-center mt-5"><div className="spinner-border text-primary"></div></div>
+                    ):(
+                        <div className="row mt-2 row-cols-1 row-cols-md-3 g-4">
+                            {projects.length === 0 && (
                                     <div className="col-12 text-center text-muted mt-5">
                                         <p>No diagrams found. Create your first one!</p>
                                     </div>
-                                )}
+                            )}
+                            {projects.map((project) => (
                                 
-                                {projects.map((project) => (
                                     <div className="col-md-4 col-lg-3" key={project._id}>
                                         <div 
-                                            className="card h-100 shadow-sm border-0 project-card" 
+                                            className="card h-100 shadow-sm-hover borderc2 animate-up-1" 
                                             style={{cursor: 'pointer', transition: 'transform 0.2s'}}
                                             onClick={() => handleOpenProject(project)}
-                                            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-                                            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                                         >
-                                            {/* Preview Placeholder */}
-                                            <div className="card-img-top bg-light d-flex align-items-center justify-content-center" style={{height: '140px'}}>
-                                                <i className="bi bi-diagram-3 text-secondary" style={{fontSize: '3rem'}}></i>
+                                            <div className="card-img-top  d-flex align-items-center justify-content-center " style={{height: '140px'}}>
+                                                <img src={db} className="w-100 h-100 rounded-top" style={{ objectFit: 'cover' }} alt="sddddddddd" />
                                             </div>
                                             
                                             <div className="card-body">
-                                                <h6 className="card-title fw-bold text-dark mb-1">{project.name}</h6>
-                                                <p className="card-text text-muted small">
+                                                <h6 className=" card-title fw-bold text-dark mb-1">{project.name}</h6>
+                                                <p className="border-bottom card-text text-muted small">
                                                     Edited {new Date(project.updatedAt).toLocaleDateString()}
                                                 </p>
-                                                <div className="d-flex justify-content-between align-items-center mt-3">
-                                                    <span className="badge bg-warning text-dark bg-opacity-25 border border-warning px-2 py-1">Public</span>
+                                                <div className="d-flex justify-content-between  align-items-center mt-3">
+                                                    <span className="">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#766f6fff"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>
+                                                    </span>
                                                     <button 
-                                                        className="btn btn-sm text-danger hover-bg-light"
+                                                        className="btn btn-sm text-danger shadow-sm-hover"
                                                         onClick={(e) => handleDelete(e, project._id)}
                                                     >
-                                                        <i className="bi bi-trash"></i>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ff2e2eff"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                                
+                            ))}
+                        </div>
+                    )}
+
+
                 </div>
+
             </div>
+            <div className="main-bg-color-1"></div>
         </div>
-    );
+    )
 }
