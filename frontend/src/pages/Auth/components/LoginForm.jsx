@@ -1,8 +1,10 @@
-export default function LoginForm({onSubmit,onChageEmail,onChagePass,handleGoogle,handleGithub}){
+import { Link } from "react-router-dom"
+
+export default function LoginForm({redirect,again,already,login,title,onSubmit,onChageEmail,onChagePass,handleGoogle,handleGithub}){
     return(
         <div className="card p-4">
             <div className="card-header border-0 bg-white text-center pb-0">
-                <h2 className="h4 fw-bolder fs-3">Login in to your platform</h2>
+                <h2 className="h4 fw-bolder fs-3">{title}</h2>
                 
             </div>
             <div className="card-body">
@@ -25,11 +27,11 @@ export default function LoginForm({onSubmit,onChageEmail,onChagePass,handleGoogl
                         </div>
                     </div>
                     <div className="d-grid">
-                        <button type="submit" className="btn btn-primary">Sign in</button>
+                        <button type="submit" className="btn btn-primary">{login}</button>
                     </div>
                 </form>
                 <div className="mt-3 mb-4 text-center">
-                    <span className="fw-normal">or login with</span>
+                    <span className="fw-normal">or {login} with</span>
                 </div>
                 <div className="btn-wrapper my-4 text-center">
                     <button className="btn btn-icon-only btn-pill btn-outline-light text-google me-2  bg-primary-subtle" onClick={handleGoogle}>
@@ -43,8 +45,11 @@ export default function LoginForm({onSubmit,onChageEmail,onChagePass,handleGoogl
                 </div>
                     <div className="d-block d-sm-flex justify-content-center align-items-center mt-4">
                     <span Name="fw-normal">
-                        Not registered?
-                        <a href="#" className=" ms-1 text-info fw-bold">Create account</a>
+                        {already} registered?
+                        <Link to={`/${redirect}`} className="ms-1 text-info fw-bold">
+                        {again}
+                        </Link>
+                        
                     </span>
                 </div>
             </div>

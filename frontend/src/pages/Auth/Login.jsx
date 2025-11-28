@@ -14,7 +14,7 @@ export default function Login(){
         e.preventDefault();
         try {
             const res = await axios.post('http://localhost:5000/api/auth/login', formData);
-            login({ username: res.data.username, id: res.data.userId }, res.data.token);
+            login({ id: res.data.userId}, res.data.token);
             navigate('/dashboard');
         } catch (err) {
             alert(err.response?.data?.error || 'Login failed');
@@ -30,7 +30,7 @@ export default function Login(){
             </div>
             <div className="p-8">
                 <div className=" login-card">
-                    <LoginForm onSubmit={handleSubmit} onChageEmail={(e) => setFormData({...formData, email: e.target.value})}  onChagePass={(e) => setFormData({...formData, password: e.target.value})} 
+                    <LoginForm redirect={"register"} again={"Create account"} already={"Not"} login={"Login"} title={"Login in to your platform"} onSubmit={handleSubmit} onChageEmail={(e) => setFormData({...formData, email: e.target.value})}  onChagePass={(e) => setFormData({...formData, password: e.target.value})} 
                     handleGoogle={() => handleSocialLogin('google')}
                     handleGithub={() => handleSocialLogin('github')}
                     />
