@@ -98,3 +98,17 @@
     cursor: pointer;
     color: white;
 }
+.login-card{
+    width: 30vw;
+}
+
+.btn:focus, 
+.btn:active, 
+.btn:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.form-control:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
