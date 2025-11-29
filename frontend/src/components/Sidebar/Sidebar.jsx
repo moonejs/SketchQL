@@ -1,79 +1,179 @@
-import SidebarHeading from "./SidebarHeading.jsx";
-import { useStore } from '../../Store/store';
-import SidebarTableEdit from "./SidebarTableEdit.jsx";
-import SidebarEdgeEdit from "./SidebarEdgeEdit.jsx";
+import { useState,useEffect } from "react";
+import { useStore } from "../../Store/store";
+import SidebarTableEdit from "./SidebarTableEdit";
+import SidebarHeading from "./SidebarHeading";
 
 export default function Sidebar() {
-    const nodes = useStore((state) => state.nodes);
-    const edges = useStore((state) => state.edges); 
-    
-    const selectedEdgeId = useStore((state) => state.selectedEdgeId); 
-    const selectedNodeId = useStore((state) => state.selectedNodeId);
-    
-    const activeNode = nodes.find(n => n.id === selectedNodeId);
-    const selectedEdge = edges.find(e => e.id === selectedEdgeId);
+  const [isOpen, setIsOpen] = useState(true);
+  const nodes = useStore((state) => state.nodes);
+  const selectedNodeId = useStore((state) => state.selectedNodeId);
+  const setSelectedNode = useStore((state) => state.setSelectedNode);
 
-    // Debugging
-    console.log("Sidebar Render - Node:", activeNode?.id, "Edge:", selectedEdge?.id);
+  const [expandedId, setExpandedId] = useState(null);
+  useEffect(() => {
+    if (selectedNodeId) {
+      setExpandedId(selectedNodeId); 
+      setIsOpen(true); 
+    } else {
+      setExpandedId(null); 
+    }
+  }, [selectedNodeId]);
 
-    // Helper to reset selection
-    const clearSelection = () => {
-        useStore.getState().setSelectedNode(null);
-        useStore.getState().setSelectedEdge(null);
-    };
+  
+  const toggleExpand = (id) => {
+    if (expandedId === id) {
+      setExpandedId(null);
+    } else {
+      setExpandedId(id);
+      setSelectedNode(id);
+    }
+  };
 
-    return (
-        <div className="h-100 shadow-lg bg-white d-flex flex-column">
-            
-            {/* 1. PRIORITY: Show Table Edit */}
-            {activeNode ? (
-                <>
-                    <div className="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
-                        <span className="fw-bold text-primary">Edit Table</span>
-                        <button className="btn btn-sm btn-close" onClick={clearSelection}></button>
-                    </div>
-                    <div className="flex-grow-1 overflow-auto">
-                        <SidebarTableEdit node={activeNode} />
-                    </div>
-                </>
-            ) : selectedEdge ? ( 
-                /* 2. PRIORITY: Show Edge Edit (This part was missing/broken logic) */
-                <>
-                    <div className="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
-                        <span className="fw-bold text-success">Edit Relationship</span>
-                        <button className="btn btn-sm btn-close" onClick={clearSelection}></button>
-                    </div>
-                    <div className="flex-grow-1 overflow-auto p-3">
-                        <SidebarEdgeEdit edge={selectedEdge} />
-                    </div>
-                </>
-            ) : (
-                /* 3. DEFAULT: Show List */
-                <>
-                    <SidebarHeading />
-                    <div className="flex-grow-1 overflow-auto p-2">
-                        {nodes.length === 0 ? (
-                            <div className="text-center text-muted mt-4">
-                                <small>No tables yet.<br/>Click "Add" or use AI.</small>
-                            </div>
-                        ) : (
-                            <ul className="list-group">
-                                {nodes.map((node) => (
-                                    <li 
-                                        key={node.id}
-                                        className="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 rounded mb-1"
-                                        onClick={() => useStore.getState().setSelectedNode(node.id)}
-                                        style={{ cursor: 'pointer', backgroundColor: '#f8f9fa' }}
-                                    >
-                                        <span className="fw-bold small">{node.data.label}</span>
-                                        <i className="bi bi-pencil-square text-muted"></i>
-                                    </li>
-                                ))}
-                            </ul>
+  return (
+    <div className="d-flex h-100 position-relative">
+      
+      <div
+        className="h-100 bg-white d-flex flex-column shadow-sm"
+        style={{
+          width: isOpen ? "320px" : "0px",
+          transition: "width 0.3s ease-in-out",
+          overflow: "hidden", 
+          whiteSpace: "nowrap", 
+        }}
+      >
+        <SidebarHeading />
+        <div className="flex-grow-1 overflow-auto">
+          {nodes.length === 0 ? (
+            <div className="text-center text-muted mt-5">
+              No tables yet.
+              <br />
+              Use the AI or "Add Table" button.
+            </div>
+          ) : (
+            <div className="d-flex flex-column">
+              {nodes.map((node) => {
+                const isExpanded = expandedId === node.id;
+                const nodeColor = node.data.color || "#6c757d";
+
+                return (
+                  <div key={node.id} className="d-flex flex-column">
+                    <div
+                      onClick={() => toggleExpand(node.id)}
+                      className={`d-flex align-items-center justify-content-between px-0 border-bottom ${
+                        isExpanded
+                          ? "bg-primary-subtle bg-opacity-10"
+                          : "bg-white hover-bg-light"
+                      }`}
+                      style={{
+                        cursor: "pointer",
+                        height: "45px",
+                        transition: "background 0.2s",
+                      }}
+                    >
+                      <div className="d-flex align-items-center h-100 flex-grow-1">
+                        <div
+                          style={{
+                            width: "6px",
+                            height: "100%",
+                            backgroundColor: nodeColor,
+                          }}
+                        ></div>
+                        <span
+                          className={`ms-3 fw-bold small ${
+                            isExpanded ? "text-primary" : "text-dark"
+                          }`}
+                        >
+                          {node.data.label}
+                        </span>
+                      </div>
+
+                      <div className="d-flex align-items-center pe-2 gap-2">
+                        {isExpanded && (
+                          <>
+                            <button
+                              className="btn btn-sm p-0 text-primary"
+                              title="Edit Name"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="24px"
+                                viewBox="0 -960 960 960"
+                                width="24px"
+                                fill="#8a8686ff"
+                              >
+                                <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                              </svg>
+                            </button>
+                            <button
+                              className="btn btn-sm p-0 text-primary"
+                              title="Focus"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="24px"
+                                viewBox="0 -960 960 960"
+                                width="24px"
+                                fill="#8a8686ff"
+                              >
+                                <path d="M480-320q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T560-480q0-33-23.5-56.5T480-560q-33 0-56.5 23.5T400-480q0 33 23.5 56.5T480-400Zm0-80ZM200-120q-33 0-56.5-23.5T120-200v-160h80v160h160v80H200Zm400 0v-80h160v-160h80v160q0 33-23.5 56.5T760-120H600ZM120-600v-160q0-33 23.5-56.5T200-840h160v80H200v160h-80Zm640 0v-160H600v-80h160q33 0 56.5 23.5T840-760v160h-80Z" />
+                              </svg>
+                            </button>
+                          </>
                         )}
+                        <button className="btn btn-sm p-0 text-muted">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24px"
+                            viewBox="0 -960 960 960"
+                            width="24px"
+                            fill="#8a8686ff"
+                          >
+                            <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
-                </>
-            )}
+                    {isExpanded && (
+                      <div className="animate-slide-down">
+                        <SidebarTableEdit node={node} />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
-    );
+      </div>
+
+       <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="bg-white border shadow-sm rounded-circle d-flex align-items-center justify-content-center position-absolute"
+        style={{
+          top: "20px",
+          left: isOpen ? "320px" : "0px",
+          width: "32px",
+          height: "32px",
+          marginLeft: isOpen ? "-16px" : "16px", 
+          zIndex: 100,
+          transition: "left 0.3s ease-in-out, margin-left 0.3s ease-in-out",
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px" 
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#8c8c8cff"
+          
+          style={{
+            transform: isOpen ? "rotate(0deg)" : "rotate(180deg)",
+            transition: "transform 0.3s ease-in-out",
+          }}
+        >
+          <path d="M640-80 240-480l400-400 71 71-329 329 329 329-71 71Z" />
+        </svg>
+      </button>
+    </div>
+  );
 }

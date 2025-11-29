@@ -1,172 +1,106 @@
-import { useStore, DATA_TYPES } from '../../Store/store';
+import { useStore, DATA_TYPES } from "../../Store/store";
 
 export default function SidebarTableEdit({ node }) {
-    const selectedNodeId = useStore((state) => state.selectedNodeId);
-    const setSelectedNode = useStore((state) => state.setSelectedNode);
-    const updateNodeLabel = useStore((state) => state.updateNodeLabel);
-    const addColumn = useStore((state) => state.addColumn);
-    const updateColumn = useStore((state) => state.updateColumn);
-    const deleteColumn = useStore((state) => state.deleteColumn);
-    const deleteTable = useStore((state) => state.deleteTable);
-    const setPrimaryKey = useStore((state) => state.setPrimaryKey);
+  const addColumn = useStore((state) => state.addColumn);
+  const updateColumn = useStore((state) => state.updateColumn);
+  const deleteColumn = useStore((state) => state.deleteColumn);
+  const setPrimaryKey = useStore((state) => state.setPrimaryKey);
 
-    const isSelected = selectedNodeId === node.id;
-    const updateNodeColor = useStore((state) => state.updateNodeColor);
-    const PRESET_COLORS = ['#0d6efd', '#198754', '#dc3545', '#ffc107', '#6610f2', '#fd7e14', '#20c997', '#343a40'];
-    const handleLabelChange = (e) => {
-        updateNodeLabel(node.id, e.target.value);
-    };
+  if (!node) return null;
 
-    const handleColumnChange = (index, field, value) => {
-        updateColumn(node.id, index, field, value);
-    };
+  const themeColor = "#20c996ff"; 
 
-    const handleDeleteTable = () => {
-        if (window.confirm(`Are you sure you want to delete the table "${node.data.label}"?`)) {
-            deleteTable(node.id);
-        }
-    };
-
-    if (isSelected) {
-        return (
-            <div className="container bg-light border border-primary-subtle rounded-2 p-3 mb-2">
-                <div className="row mb-3">
-                    <div className="col-7">
-                        <label className="form-label fw-bold small">Table Name</label>
-                        <input
-                            type="text"
-                            className="form-control form-control-sm"
-                            value={node.data.label}
-                            onChange={handleLabelChange}
-                        />
-                    </div>
-                    <div className="mb-3">
-                    <label className="form-label fw-bold small text-muted">Table Color</label>
-                    <div className="d-flex align-items-center gap-2 flex-wrap">
-                        {/* Custom Color Picker */}
-                        <input 
-                            type="color" 
-                            className="form-control form-control-color form-control-sm" 
-                            value={node.data.color || '#0d6efd'}
-                            onChange={(e) => updateNodeColor(node.id, e.target.value)}
-                            title="Custom Color"
-                        />
-                        
-                        {/* Preset Dots */}
-                        {PRESET_COLORS.map((c) => (
-                            <div 
-                                key={c}
-                                onClick={() => updateNodeColor(node.id, c)}
-                                style={{ 
-                                    width: '20px', 
-                                    height: '20px', 
-                                    backgroundColor: c, 
-                                    cursor: 'pointer', 
-                                    borderRadius: '50%',
-                                    border: node.data.color === c ? '2px solid #333' : '1px solid #ddd',
-                                    transition: 'transform 0.1s'
-                                }}
-                                title={c}
-                            />
-                        ))}
-                    </div>
-                </div>
-                    <div className="col-5 d-flex align-items-end justify-content-end">
-                        <button
-                            className="btn btn-sm btn-outline-danger"
-                            onClick={handleDeleteTable}
-                        >
-                            Delete Table
-                        </button>
-                    </div>
-                </div>
-
-
-                <div className="d-flex gap-2 mb-1 small text-muted">
-                    <div style={{ flex: 3 }}>Name</div>
-                    <div style={{ flex: 2 }}>Type</div>
-                    <div style={{ flex: 1 }} className="text-center">PK</div>
-                    <div style={{ flex: 1 }} className="text-center">NN</div>
-                    <div style={{ width: '30px' }}></div>
-                </div>
-
-                <div className="d-flex flex-column gap-2 mb-3">
-                    {node.data.columns.map((col, index) => (
-                        <div className="d-flex gap-2 align-items-center" key={index}>
-
-                            <input
-                                type="text"
-                                style={{ flex: 3 }}
-                                className="form-control form-control-sm"
-                                value={col.name}
-                                onChange={(e) => handleColumnChange(index, 'name', e.target.value)}
-                            />
-
-                            <select
-                                style={{ flex: 2 }}
-                                className="form-select form-select-sm"
-                                value={col.type}
-                                onChange={(e) => handleColumnChange(index, 'type', e.target.value)}
-                            >
-                                {DATA_TYPES.map((type) => (
-                                    <option key={type} value={type}>{type}</option>
-                                ))}
-                            </select>
-
-                            <div style={{ flex: 1 }} className="text-center">
-                                <input
-                                    type="radio"
-                                    className="form-check-input"
-                                    name={`${node.id}_pk_group`}
-                                    checked={col.isPK || false}
-                                    onChange={() => setPrimaryKey(node.id, index)}
-                                />
-                            </div>
-
-         
-                            <div style={{ flex: 1 }} className="text-center">
-                                <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    checked={!col.isNullable}
-                                    disabled={col.isPK}
-                                    onChange={(e) => handleColumnChange(index, 'isNullable', !e.target.checked)}
-                                />
-                            </div>
-
-
-                            <button
-                                style={{ width: '30px' }}
-                                className="btn btn-sm btn-outline-danger p-1"
-                                onClick={() => deleteColumn(node.id, index)}
-                            >
-                                X
-                            </button>
-                        </div>
+  return (
+    <div className="bg-white border-start border-end border-bottom">
+      
+      <div className="p-2 d-flex flex-column gap-2">
+        {node.data.columns.map((col, index) => (
+          <div key={index} className="d-flex align-items-center gap-2">
+            <input
+              type="text"
+              className="form-control form-control-sm border-secondary-subtle"
+              value={col.name}
+              placeholder="name"
+              onChange={(e) => updateColumn(node.id, index, 'name', e.target.value)}
+              style={{ flex: 2, height: '32px' }}
+            />
+            <div style={{ flex: 1.5 }}>
+                <input
+                    list="dataTypes"
+                    className="form-control form-control-sm border-secondary-subtle"
+                    value={col.type}
+                    placeholder="type"
+                    onChange={(e) => updateColumn(node.id, index, 'type', e.target.value)}
+                    style={{ height: '32px' }}
+                />
+                
+                <datalist id="dataTypes">
+                    {DATA_TYPES.map((t) => (
+                        <option key={t} value={t} />
                     ))}
-                </div>
-
-                <div className="d-flex gap-2">
-                    <button
-                        className="btn btn-sm btn-primary"
-                        onClick={() => addColumn(node.id)}
-                    >
-                        Add Column
-                    </button>
-                </div>
-
+                </datalist>
             </div>
-        )
-    }
+            <button 
+                className="btn   fw-bold"
+                style={{ 
+                    width: '24px', 
+                    color: col.isNullable ? themeColor : '#adb5bd'
+                }}
+                title="Toggle Nullable"
+                onClick={() => updateColumn(node.id, index, 'isNullable', !col.isNullable)}
+            >
+                N
+            </button>
 
-    return (
-        <li
-            className="list-group-item list-group-item-action d-flex justify-content-between align-items-center rounded-2 mb-1 border-0"
-            onClick={() => setSelectedNode(node.id)}
-            style={{ cursor: 'pointer' }}
-        >
-            <span>{node.data.label}</span>
-            <button className="btn btn-sm border-0 p-0 text-muted">...</button>
-        </li>
-    );
+            <button 
+                className="border-0 bg-transparent p-0" 
+                style={{ 
+                    width: '24px',
+                    color: col.isPK ? themeColor : '#adb5bd' 
+                }}
+                title="Toggle Primary Key"
+                onClick={() => setPrimaryKey(node.id, index)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#9a9a9aff"><path d="M280-400q-33 0-56.5-23.5T200-480q0-33 23.5-56.5T280-560q33 0 56.5 23.5T360-480q0 33-23.5 56.5T280-400Zm0 160q-100 0-170-70T40-480q0-100 70-170t170-70q67 0 121.5 33t86.5 87h352l120 120-180 180-80-60-80 60-85-60h-47q-32 54-86.5 87T280-240Zm0-80q56 0 98.5-34t56.5-86h125l58 41 82-61 71 55 75-75-40-40H435q-14-52-56.5-86T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Z"/></svg>
+                  <wa-icon name="key"></wa-icon>
+                <i className={`bi ${col.isPK ? 'bi-key-fill' : 'bi-circle'}`} style={{fontSize: '1rem'}}>
+                  
+                </i>
+            </button>
+            <div className="dropdown">
+                <button 
+                    className="border-0 bg-transparent text-muted p-0" 
+                    type="button" 
+                    data-bs-toggle="dropdown"
+                    style={{ width: '20px' }}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#7f7878ff"><path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/></svg>
+                </button>
+                <ul className="dropdown-menu dropend shadow-sm border-0">
+                    <li>
+                        <button className="dropdown-item text-danger fw-bolder bg-primary rounded-1 " onClick={() => deleteColumn(node.id, index)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg> Delete column
+                        </button>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="d-flex justify-content-end gap-2 p-2 border-top mt-1">
+         
+         <button 
+            className="btn rounded-1  fw-bolder px-2 py-2" 
+            style={{ 
+                border: `1px solid ${themeColor}`, 
+                color: themeColor,
+                fontSize: '0.9rem' 
+            }}
+            onClick={() => addColumn(node.id)}
+         >
+            Add Column
+         </button>
+      </div>
+    </div>
+  );
 }

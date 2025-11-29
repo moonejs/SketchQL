@@ -1,5 +1,5 @@
 :root{
-    --main-color:#f875aa;
+    --main-color:#2ed0db;
     --main-color-hover:#e95c94;
 }
 
@@ -202,3 +202,8 @@
     color: rgba(255, 255, 255, 0.7) !important; 
     opacity: 1;
 }
+
+.hv svg:hover{
+    color: #ff0707;
+}
+
