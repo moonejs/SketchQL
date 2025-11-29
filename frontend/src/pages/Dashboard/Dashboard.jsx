@@ -67,6 +67,7 @@ export default function Dashboard(){
     return(
         <div className="container-fluid p-0 h-100vh ">
             <div className="bg-black dashboard-h ">
+                
                 <div className="">
                     <DashNav userName={user?.username} onClick={() => { logout(); navigate('/')}}/>
                 </div>
