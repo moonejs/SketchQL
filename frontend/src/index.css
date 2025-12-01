@@ -127,7 +127,7 @@
     border-top: 5px solid var(--main-color);
 }
 .canvas-nav{
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 .canvas-nav-hover:hover {
     background-color: #4F46E5;
@@ -212,4 +212,10 @@
 }
 .sidebar-table-color2{
     background-color: #C7D2FE
+}
+
+.logo{
+    height: 2.2rem;
+    border-radius: 10px;
+    
 }

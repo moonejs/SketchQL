@@ -1,12 +1,14 @@
 import Logo from "./components/logo"
 import SubHeading from "./components/SubHeading"
 import Heading from "./components/Heading"
+import logoImg from "../../assets/logoWhite.png"
+
 
 export default function Footer(){
     return(
         <div className="container  h-75  pt-5 d-flex gap-8 border-bottom">
             <div>
-                <Logo className={"text-light"}/>
+                <Logo logo={logoImg} className={"text-light"}/>
                 <SubHeading word={"Work together to design, model and document the database schema of your app."} className={"subHeading-w4 mt-4"}/>
 
             </div>

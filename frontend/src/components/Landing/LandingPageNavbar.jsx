@@ -2,6 +2,7 @@ import Logo from "./components/logo"
 import NavLink from "./components/NavLink"
 import Btn from "./components/Btn"
 import { useNavigate } from "react-router-dom"
+import logoImg from "../../assets/logo.png"
 export default function LandingPageNavbar(){
     const navigate = useNavigate();
     const scrollToSection = (sectionId) => {
@@ -14,7 +15,7 @@ export default function LandingPageNavbar(){
         <nav className="navbar navbar-expand-lg">
             <div className="container-fluid">
                 <a className="ms-3" href="#">
-                    <Logo></Logo>
+                    <Logo logo={logoImg} ></Logo>
                 </a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
