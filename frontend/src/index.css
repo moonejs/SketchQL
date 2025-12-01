@@ -1,6 +1,6 @@
 :root{
-    --main-color:#2ed0db;
-    --main-color-hover:#e95c94;
+    --main-color:#6366F1;
+    --main-color-hover:#4F46E5;
 }
 
 .main-primary-color{
@@ -130,10 +130,10 @@
     font-size: 1.1rem;
 }
 .canvas-nav-hover:hover {
-    background-color: #da5389;
+    background-color: #4F46E5;
 }
 .canvas-navc {
-    background-color: #da5389;
+    background-color: #6366F1;
 }
 .canvas-nav-btn-hover:hover{
     background-color: #f1f5f9;
@@ -194,7 +194,7 @@
             z-index: -1; 
             inset: 3px; 
             
-            background: linear-gradient(90deg, #9640ff, #279cd7); 
+            background: linear-gradient(90deg, #0ed4fc, #323dba); 
             
             border-radius: 0; 
         }
@@ -207,3 +207,9 @@
     color: #ff0707;
 }
 
+.sidebar-table-color{
+    background-color: #F1F5F9;
+}
+.sidebar-table-color2{
+    background-color: #C7D2FE
+}

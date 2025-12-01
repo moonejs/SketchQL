@@ -1,27 +1,26 @@
   import { useState, useEffect } from 'react';
   import { ReactFlow,Background, Controls, MiniMap,StepEdge,addEdge} from '@xyflow/react';
   import '@xyflow/react/dist/style.css';
-import TableEdge from './TableEdge';
+import { SmartStepEdge } from '@tisoap/react-flow-smart-edge';
   import TableNode from './TableNode';
   import { useStore } from '../../Store/store';
-import CustomMarkers from './CustomMarkers';
+
   const nodeTypes = {
     tableNode: TableNode,
   };
-
-  const edgeTypes = {
-  step: TableEdge, 
+const edgeTypes = {
+  step: StepEdge,
+  smart: StepEdge,
 };
-
 const defaultEdgeOptions = {
-  type: 'step', 
-  style: { 
-    strokeWidth: 2, 
-    stroke: '#b1b1b7',
-    cursor: 'pointer' 
-  },
-  interactionWidth: 20, 
-  
+    type: 'step', 
+    style: { 
+        strokeWidth: 2, 
+        stroke: '#b1b1b7',
+        cursor: 'pointer' 
+    },
+    interactionWidth: 25, 
+    markerEnd: { type: 'arrowclosed', color: '#b1b1b7' },
 };
 
   export default function Table() {
@@ -53,7 +52,6 @@ const defaultEdgeOptions = {
     return (
 
       <div style={{ width: '100%', height: '100%' }}>
-        <CustomMarkers />
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -90,7 +88,7 @@ const defaultEdgeOptions = {
           <Background gap={12} size={1} />
           <Controls />
           <MiniMap 
-            nodeColor={() => '#0d6efd'}
+            nodeColor={() => '#0d6efd'} // Blue dots for your tables
             style={{ border: '1px solid #dee2e6', borderRadius: '8px' }}
         />
         </ReactFlow>

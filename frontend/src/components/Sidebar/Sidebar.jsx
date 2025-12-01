@@ -89,8 +89,8 @@ export default function Sidebar() {
                       onClick={() => toggleExpand(node.id)}
                       className={`d-flex align-items-center justify-content-between px-0 border-bottom ${
                         isExpanded
-                          ? "bg-primary-subtle bg-opacity-10"
-                          : "bg-white hover-bg-light"
+                          ? "sidebar-table-color2 bg-opacity-10"
+                          : "sidebar-table-color hover-bg-light"
                       }`}
                       style={{
                         cursor: "pointer",
@@ -98,7 +98,7 @@ export default function Sidebar() {
                         transition: "background 0.2s",
                       }}
                     >
-                      <div className="d-flex align-items-center h-100 flex-grow-1">
+                      <div className="d-flex  bg- align-items-center h-100 flex-grow-1">
                         <div
                           style={{
                             width: "6px",

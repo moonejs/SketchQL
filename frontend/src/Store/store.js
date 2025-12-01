@@ -222,12 +222,8 @@ export const useStore=create(
                     type:'step',
                     animated:false,
                     style: { stroke: '#b1b1b7', strokeWidth: 2 },
-                    markerEnd:{
-                        type:MarkerType.ArrowClosed,
-                        width:20,
-                        height:20,
-                        color: '#b1b1b7',
-                    },
+                    markerStart: 'rel-one-start',
+                    markerEnd: 'rel-many-end',
                     data:{label:'1:N'}
                 },get().edges),
             });
@@ -236,15 +232,20 @@ export const useStore=create(
             set({
                 edges:get().edges.map((edge)=>{
                     if(edgeId==edge.id){
-                        let newMarkerEnd = { type: MarkerType.ArrowClosed, width: 20, height: 20 };
+                        let newMarkerEnd = undefined;
                         let newMarkerStart = undefined;
-                        if (label === 'N:1') {
-                            newMarkerEnd = undefined;
-                            newMarkerStart = { type: MarkerType.ArrowClosed, width: 20, height: 20 };
-                        }
-                        else if (label === '1:1') {
-                            newMarkerEnd = { type: MarkerType.Arrow, width: 20, height: 20 };
-                        }
+                        if (label === '1:N') {
+                    newMarkerStart = 'rel-one-start'; 
+                    newMarkerEnd = 'rel-many-end';    
+                } 
+                else if (label === 'N:1') {
+                    newMarkerStart = 'rel-many-start'; 
+                    newMarkerEnd = 'rel-one-end';      
+                } 
+                else if (label === '1:1') {
+                    newMarkerStart = 'rel-one-start';  
+                    newMarkerEnd = 'rel-one-end';      
+                }   
                         return {
                             ...edge,
                             markerEnd: newMarkerEnd,
