@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useStore } from "../../Store/store";
 import SidebarTableEdit from "./SidebarTableEdit";
 import SidebarHeading from "./SidebarHeading";
@@ -8,19 +8,25 @@ export default function Sidebar() {
   const nodes = useStore((state) => state.nodes);
   const selectedNodeId = useStore((state) => state.selectedNodeId);
   const setSelectedNode = useStore((state) => state.setSelectedNode);
+  const updateNodeLabel = useStore((state) => state.updateNodeLabel);
+
+  const [renamingId, setRenamingId] = useState(null);
+  const [tempName, setTempName] = useState("");
 
   const [expandedId, setExpandedId] = useState(null);
+
   useEffect(() => {
     if (selectedNodeId) {
-      setExpandedId(selectedNodeId); 
-      setIsOpen(true); 
+      setExpandedId(selectedNodeId);
+      setIsOpen(true);
     } else {
-      setExpandedId(null); 
+      setExpandedId(null);
     }
   }, [selectedNodeId]);
 
-  
   const toggleExpand = (id) => {
+    if (renamingId === id) return;
+
     if (expandedId === id) {
       setExpandedId(null);
     } else {
@@ -29,16 +35,34 @@ export default function Sidebar() {
     }
   };
 
+  const handleEditClick = (e, node) => {
+    e.stopPropagation();
+    setRenamingId(node.id);
+    setTempName(node.data.label);
+  };
+
+  const saveName = () => {
+    if (renamingId && tempName.trim() !== "") {
+      updateNodeLabel(renamingId, tempName);
+    }
+    setRenamingId(null);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      saveName();
+    }
+  };
+
   return (
     <div className="d-flex h-100 position-relative">
-      
       <div
         className="h-100 bg-white d-flex flex-column shadow-sm"
         style={{
           width: isOpen ? "320px" : "0px",
           transition: "width 0.3s ease-in-out",
-          overflow: "hidden", 
-          whiteSpace: "nowrap", 
+          overflow: "hidden",
+          whiteSpace: "nowrap",
         }}
       >
         <SidebarHeading />
@@ -54,6 +78,10 @@ export default function Sidebar() {
               {nodes.map((node) => {
                 const isExpanded = expandedId === node.id;
                 const nodeColor = node.data.color || "#6c757d";
+                
+              
+                const isRenaming = renamingId === node.id; 
+                
 
                 return (
                   <div key={node.id} className="d-flex flex-column">
@@ -78,25 +106,36 @@ export default function Sidebar() {
                             backgroundColor: nodeColor,
                           }}
                         ></div>
-                        <span
-                          className={`ms-3 fw-bold small ${
-                            isExpanded ? "text-primary" : "text-dark"
-                          }`}
-                        >
-                          {node.data.label}
-                        </span>
+                        {isRenaming ? (
+                          <input
+                            type="text"
+                            className="form-control form-control-sm ms-2 shadow-none border-primary"
+                            value={tempName}
+                            onChange={(e) => setTempName(e.target.value)}
+                            onBlur={saveName}    
+                            onKeyDown={handleKeyDown} 
+                            onClick={(e) => e.stopPropagation()} 
+                            autoFocus 
+                            style={{ maxWidth: '160px' }}
+                          />
+                        ) : (
+                          <span className={`ms-3 fw-bold small ${isExpanded ? "text-primary" : "text-dark"}`}>
+                            {node.data.label}
+                          </span>
+                        )}
                       </div>
 
                       <div className="d-flex align-items-center pe-2 gap-2">
-                        {isExpanded && (
+                        {isExpanded && !isRenaming && (
                           <>
                             <button
-                              className="btn btn-sm p-0 text-primary"
+                              className="border-0 bg-transparent p-0 text-primary"
                               title="Edit Name"
+                              onClick={(e) => handleEditClick(e, node)}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                height="24px"
+                                height="20px"
                                 viewBox="0 -960 960 960"
                                 width="24px"
                                 fill="#8a8686ff"
@@ -105,8 +144,12 @@ export default function Sidebar() {
                               </svg>
                             </button>
                             <button
-                              className="btn btn-sm p-0 text-primary"
+                              className="border-0 bg-transparent p-0 text-primary"
                               title="Focus"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                useStore.getState().setNodeToFocus(node.id);
+                              }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -120,17 +163,7 @@ export default function Sidebar() {
                             </button>
                           </>
                         )}
-                        <button className="btn btn-sm p-0 text-muted">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            height="24px"
-                            viewBox="0 -960 960 960"
-                            width="24px"
-                            fill="#8a8686ff"
-                          >
-                            <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-                          </svg>
-                        </button>
+                        
                       </div>
                     </div>
                     {isExpanded && (
@@ -146,7 +179,7 @@ export default function Sidebar() {
         </div>
       </div>
 
-       <button
+      <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-white border shadow-sm rounded-circle d-flex align-items-center justify-content-center position-absolute"
         style={{
@@ -154,18 +187,17 @@ export default function Sidebar() {
           left: isOpen ? "320px" : "0px",
           width: "32px",
           height: "32px",
-          marginLeft: isOpen ? "-16px" : "16px", 
+          marginLeft: isOpen ? "-16px" : "16px",
           zIndex: 100,
           transition: "left 0.3s ease-in-out, margin-left 0.3s ease-in-out",
         }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          height="24px" 
+          height="24px"
           viewBox="0 -960 960 960"
           width="24px"
           fill="#8c8c8cff"
-          
           style={{
             transform: isOpen ? "rotate(0deg)" : "rotate(180deg)",
             transition: "transform 0.3s ease-in-out",
