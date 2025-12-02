@@ -1,4 +1,4 @@
-import Logo from "./components/logo"
+import Logo from "./components/Logo"
 import SubHeading from "./components/SubHeading"
 import Heading from "./components/Heading"
 import logoImg from "../../assets/logoWhite.png"
