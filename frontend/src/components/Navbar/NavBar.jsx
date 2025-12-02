@@ -1,4 +1,4 @@
-import Logo from "../Landing/components/logo"
+import Logo from "../Landing/components/Logo"
 import { useState } from "react"
 import { useStore } from '../../Store/store';
 import CodeExportModal from '../codeGenerator/CodeExportModal';

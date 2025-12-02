@@ -1,4 +1,4 @@
-import LoginImg from "../../../assets/LoginImg.png"
+import LoginImg from "../../../assets/loginImg.png"
 
 export default function SideImg(){
     return(

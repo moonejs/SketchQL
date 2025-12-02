@@ -1,4 +1,4 @@
-import Logo from "./components/logo"
+import Logo from "./components/Logo"
 import NavLink from "./components/NavLink"
 import Btn from "./components/Btn"
 import { useNavigate } from "react-router-dom"
