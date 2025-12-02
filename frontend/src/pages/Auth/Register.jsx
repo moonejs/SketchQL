@@ -2,7 +2,7 @@ import { useState } from "react"
 import axios from "axios"
 import { useNavigate, Link } from 'react-router-dom';
 import SideImg from "./components/SideImg"
-import LoginForm from "./components/loginForm"
+import LoginForm from "./components/LoginForm"
 
 export default function Register(){
     const navigate = useNavigate();
@@ -12,12 +12,14 @@ export default function Register(){
         });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         if (error) setError(''); 
     };
     const handleSocialLogin = (provider) => {
-        window.location.href = `http://localhost:5000/auth/${provider}`;
+        window.location.href = `${API_URL}/auth/${provider}`;
     };
 
     const handleSubmit = async (e) => {
@@ -33,7 +35,7 @@ export default function Register(){
 
         try {
             
-            await axios.post('http://localhost:5000/api/auth/register', {
+            await axios.post(`${API_URL}/api/auth/register`, {
                 username: autoUsername,
                 email: formData.email,
                 password: formData.password

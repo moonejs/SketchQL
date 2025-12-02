@@ -15,6 +15,7 @@ export default function Dashboard(){
     const { loadProject, resetCanvas } = useStore();
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
     useEffect(() => {
             fetchProjects();
@@ -22,7 +23,7 @@ export default function Dashboard(){
 
     const fetchProjects = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/diagramss/diagrams', {
+            const res = await axios.get(`${API_URL}/api/diagramss/diagrams`, {
                 headers: { 'auth-token': token }
             });
             setProjects(res.data);
@@ -52,7 +53,7 @@ export default function Dashboard(){
         if(!window.confirm("Are you sure you want to delete this diagram?")) return;
 
         try {
-            await axios.delete(`http://localhost:5000/api/diagramss/delete/${id}`, {
+            await axios.delete(`${API_URL}/api/diagramss/delete/${id}`, {
                 headers: { 'auth-token': token }
             });
             

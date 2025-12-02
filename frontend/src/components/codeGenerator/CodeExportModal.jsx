@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CodeBlock from './CodeBlock.jsx';
 
-// Import your generators
+
 import generateFlaskSQLAlchemy from './generateFlaskSQLAlchemy.js';
 import generateMySQL from './generateMySQL.js';
 import generateMongoose from './generateMongoose.js';
@@ -26,8 +26,8 @@ export default function CodeExportModal({ isOpen, onClose, nodes, edges }) {
             if (generator) {
                 let generatedCode = '';
                 
-                // --- DEBUGGING: Check if generators are actually running ---
-                console.log(`Generating code for: ${selectedLang}`);
+                
+               
                 
                 try {
                     if(selectedLang === 'sqlalchemy') generatedCode = generateFlaskSQLAlchemy(nodes, edges);
@@ -52,7 +52,7 @@ export default function CodeExportModal({ isOpen, onClose, nodes, edges }) {
             <div className="modal-dialog modal-xl modal-dialog-centered">
                 <div className="modal-content shadow-lg border-0 overflow-hidden" style={{ borderRadius: '16px', height: '80vh', display: 'flex', flexDirection: 'row' }}>
                     
-                    {/* LEFT SIDEBAR */}
+                   
                     <div className="d-flex flex-column flex-shrink-0" style={{ width: '280px', backgroundColor: '#f8f9fa', borderRight: '1px solid #e9ecef' }}>
                         <div className="p-4 pb-2">
                             <h6 className="fw-bold text-dark m-0" style={{ letterSpacing: '-0.5px' }}>Export Schema</h6>
@@ -90,12 +90,9 @@ export default function CodeExportModal({ isOpen, onClose, nodes, edges }) {
                         </div>
                     </div>
 
-                    {/* RIGHT CONTENT */}
+                   
                     <div className="flex-grow-1 d-flex flex-column bg-white">
-                        {/* 👇 THE FIX IS HERE: 
-                           Adding key={selectedLang} forces React to re-render 
-                           the component entirely when the language changes.
-                        */}
+                       
                         <CodeBlock 
                             key={selectedLang} 
                             code={code} 
