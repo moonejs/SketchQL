@@ -14,10 +14,7 @@ export default function Register(){
     const [loading, setLoading] = useState(false);
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-        if (error) setError(''); 
-    };
+
     const handleSocialLogin = (provider) => {
         window.location.href = `${API_URL}/auth/${provider}`;
     };
@@ -63,7 +60,7 @@ export default function Register(){
                 </div>
                 <div className="p-8">
                     <div className=" login-card">
-                        <LoginForm redirect={"login"} again={"Login"}already={"Already"} login={"Register"} title={"Welcome!"} onSubmit={handleSubmit} onChageEmail={handleChange}  onChagePass={handleChange} 
+                        <LoginForm redirect={"login"} again={"Login"}already={"Already"} login={"Register"} title={"Welcome!"} onSubmit={handleSubmit} onChageEmail={(e) => setFormData({...formData, email: e.target.value})} onChagePass={(e) => setFormData({...formData, password: e.target.value})} 
                         handleGoogle={() => handleSocialLogin('google')}
                         handleGithub={() => handleSocialLogin('github')}
                         />
