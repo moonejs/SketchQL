@@ -17,12 +17,13 @@ export default function SharedDiagram() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [projectName, setProjectName] = useState('');
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
     useEffect(() => {
         const fetchDiagram = async () => {
             try {
                
-                const res = await axios.get(`http://localhost:5000/api/diagramss/shared/${id}`);
+                const res = await axios.get(`${API_URL}/api/diagramss/shared/${id}`);
                 setNodes(res.data.nodes);
                 setEdges(res.data.edges);
                 setProjectName(res.data.name);

@@ -17,7 +17,8 @@ export default function AiModal({ isOpen, onClose }) {
         setLoading(true);
 
         try {
-            const res = await axios.post('http://localhost:5000/api/ai/generate',
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const res = await axios.post(`${API_URL}/api/ai/generate`,
                 { userPrompt: prompt },
                 { headers: { 'auth-token': token } }
             );
@@ -73,7 +74,6 @@ export default function AiModal({ isOpen, onClose }) {
         }
     };
 
-    // Styles to match the screenshot theme
     const styles = {
         overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.4)',
@@ -91,7 +91,7 @@ export default function AiModal({ isOpen, onClose }) {
         },
         searchContainer: {
             padding: '16px',
-            backgroundColor: '#f9fafb', // Light gray top
+            backgroundColor: '#f9fafb', 
             borderBottom: '1px solid #e5e7eb',
             display: 'flex',
             alignItems: 'flex-start',
@@ -132,7 +132,7 @@ export default function AiModal({ isOpen, onClose }) {
         sectionTitle: {
             fontSize: '12px',
             fontWeight: '600',
-            color: '#9ca3af', // lighter text for label
+            color: '#9ca3af', 
             marginBottom: '12px',
             marginTop: '8px',
             textTransform: 'uppercase',
@@ -165,7 +165,7 @@ export default function AiModal({ isOpen, onClose }) {
             backgroundColor: '#f9fafb',
             borderTop: '1px solid #e5e7eb',
             display: 'flex',
-            justifyContent: 'flex-end', // Aligned to right
+            justifyContent: 'flex-end', 
             alignItems: 'center',
             gap: '10px'
         }
@@ -176,7 +176,7 @@ export default function AiModal({ isOpen, onClose }) {
             <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '650px' }}>
                 <div className="modal-content" style={styles.modalContent}>
                     
-                    {/* Top Search/Input Area */}
+              
                     <div style={styles.searchContainer}>
                         <i className="bi bi-search" style={styles.searchIcon}></i>
                         <textarea
@@ -192,7 +192,7 @@ export default function AiModal({ isOpen, onClose }) {
                         </div>
                     </div>
 
-                    {/* Middle Section (Context/Examples) */}
+                
                     <div style={styles.bodySection}>
                         <div style={styles.sectionTitle}>Suggestions</div>
                         <div>
@@ -226,7 +226,7 @@ export default function AiModal({ isOpen, onClose }) {
                         </div>
                     </div>
 
-                    {/* Simplified Footer - No help text */}
+                
                     <div style={styles.footer}>
                         <button 
                             className="btn rounded-1 btn-light text-muted border" 

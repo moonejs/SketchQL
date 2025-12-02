@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { github } from 'react-syntax-highlighter/dist/esm/styles/hljs'; // github is a good light theme
-
+import { github } from 'react-syntax-highlighter/dist/esm/styles/hljs'; 
 export default function CodeBlock({ code, language }) {
     const [isCopied, setIsCopied] = useState(false);
 
@@ -13,7 +12,7 @@ export default function CodeBlock({ code, language }) {
 
     return (
         <div className="position-relative h-100 d-flex flex-column" style={{ backgroundColor: '#fff' }}>
-            {/* Header / Toolbar */}
+     
             <div className="d-flex justify-content-between align-items-center px-4 py-3 border-bottom border-light-subtle bg-white sticky-top">
                 <span className="fw-bold text-secondary small text-uppercase spacing-wide" style={{ letterSpacing: '1px' }}>
                     {language === 'javascript' || language === 'jsx' ? 'JavaScript / Node' : language} Source
@@ -38,7 +37,7 @@ export default function CodeBlock({ code, language }) {
                 </button>
             </div>
 
-            {/* Code Content */}
+         
             <div className="flex-grow-1 overflow-auto custom-scrollbar" style={{ padding: '0' }}>
                 <SyntaxHighlighter 
                     language={language}
@@ -49,7 +48,7 @@ export default function CodeBlock({ code, language }) {
                         padding: '1.5rem',
                         fontSize: '14px',
                         lineHeight: '1.5',
-                        backgroundColor: '#fff', // Force white background
+                        backgroundColor: '#fff', 
                     }}
                     lineNumberStyle={{
                         minWidth: '2.5em',

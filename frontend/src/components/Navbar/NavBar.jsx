@@ -80,7 +80,8 @@ export default function NavBar(){
                 projectId: currentProjectId 
             };
 
-            const res = await axios.post('http://localhost:5000/api/diagramss/save', payload, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const res = await axios.post(`${API_URL}/api/diagramss/save`, payload, {
                 headers: { 'auth-token': token }
             });
 
