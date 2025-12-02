@@ -27,11 +27,9 @@ export default function LandingPageNavbar(){
                             <NavLink onClick={() => scrollToSection('features')} word={"Features"}></NavLink>
                         </li>
                         <li className="nav-item">
-                           <NavLink  word={"Pricing"}></NavLink>
+                           <NavLink onClick={() => scrollToSection('techStack')} word={"TechStack"}></NavLink>
                         </li>
-                        <li className="nav-item">
-                            <NavLink className="" word={"Examples"}></NavLink>
-                        </li>
+                        
                         
                     </ul>
                     <div className="d-flex">

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ReactFlow, Background, Controls, MiniMap } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import TableNode from '../../components/DbDesign/TableNode';
 import { SmartStepEdge } from '@tisoap/react-flow-smart-edge';
-
-// Define types locally to avoid store conflicts
+import Image from '../../components/Landing/components/Image';
+import logo from "../../assets/logo.png"
 const nodeTypes = { tableNode: TableNode };
 const edgeTypes = { smart: SmartStepEdge };
 
@@ -21,13 +21,14 @@ export default function SharedDiagram() {
     useEffect(() => {
         const fetchDiagram = async () => {
             try {
-                // Note: Use your full backend URL variable here
+               
                 const res = await axios.get(`http://localhost:5000/api/diagramss/shared/${id}`);
                 setNodes(res.data.nodes);
                 setEdges(res.data.edges);
                 setProjectName(res.data.name);
             } catch (err) {
-                setError("Diagram not found or deleted.");
+                console.error(err);
+                setError("Diagram not found or has been deleted.");
             } finally {
                 setLoading(false);
             }
@@ -35,39 +36,165 @@ export default function SharedDiagram() {
         fetchDiagram();
     }, [id]);
 
-    if (loading) return <div className="vh-100 d-flex justify-content-center align-items-center">Loading Diagram...</div>;
-    if (error) return <div className="vh-100 d-flex justify-content-center align-items-center text-danger">{error}</div>;
 
+    if (loading) return (
+        <div className="vh-100 w-100 d-flex flex-column justify-content-center align-items-center bg-light">
+            <div className="spinner-border text-primary mb-3" role="status" style={{width: '3rem', height: '3rem'}}></div>
+            <p className="text-muted fw-medium">Loading Diagram...</p>
+        </div>
+    );
+
+    
+    if (error) return (
+        <div className="vh-100 w-100 d-flex flex-column justify-content-center align-items-center bg-light">
+            <div className="bg-white p-5 rounded-4 shadow-sm text-center border">
+                <i className="bi bi-exclamation-triangle-fill text-warning display-4 mb-3"></i>
+                <h3 className="fw-bold text-dark">Oops!</h3>
+                <p className="text-muted mb-4">{error}</p>
+                <Link to="/" className="btn btn-primary px-4 rounded-pill">
+                    Go Home
+                </Link>
+            </div>
+        </div>
+    );
+
+    
+    const styles = {
+        container: {
+            height: '100vh',
+            width: '100vw',
+            backgroundColor: '#f8f9fa',
+            position: 'relative',
+            overflow: 'hidden'
+        },
+        header: {
+            position: 'absolute',
+            top: '20px',
+            right: '-10rem',
+            transform: 'translateX(-50%)',
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+            backdropFilter: 'blur(8px)',
+            padding: '10px 24px',
+            borderRadius: '12px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+            border: '1px solid rgba(255,255,255,0.6)',
+            width: 'auto',
+            minWidth: '320px',
+            justifyContent: 'space-between'
+        },
+        titleGroup: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+        },
+
+        title: {
+            fontSize: '14px',
+            fontWeight: '600',
+            color: '#1f2937',
+            margin: 0
+        },
+        subtitle: {
+            fontSize: '12px',
+            color: '#6b7280',
+            margin: 0
+        },
+        
+        badge: {
+            position: 'absolute',
+            bottom: '20px',
+            right: '20px',
+            zIndex: 10,
+            backgroundColor: '#fff',
+            padding: '8px 16px',
+            borderRadius: '8px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+            fontSize: '12px',
+            fontWeight: '600',
+            color: '#374151',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            border: '1px solid #e5e7eb'
+        }
+    };
+
+  
     return (
-        <div className="d-flex flex-column vh-100 bg-light">
-            {/* Simple Read-Only Header */}
-            <nav className="navbar bg-white border-bottom px-4 shadow-sm">
-                <span className="navbar-brand fw-bold text-primary">
-                    <i className="bi bi-eye-fill me-2"></i>
-                    View Mode: <span className="text-dark">{projectName}</span>
-                </span>
-                <a href="/login" className="btn btn-sm btn-outline-primary">Create your own</a>
-            </nav>
+        <div style={styles.container}>
+            
+            
+            <div style={styles.header}>
+                <div style={styles.titleGroup}>
+                    <div style={styles.iconBox}>
+                        <Image src={logo} className={"logo"}></Image>
+                    </div>
+                    <div>
+                        <h1 style={styles.title}>{projectName}</h1>
+                        <p style={styles.subtitle}>
+                            
+                            Shared View
+                        </p>
+                    </div>
+                </div>
+                
+                <div className="d-none d-md-block" style={{width: '1px', height: '24px', backgroundColor: '#e5e7eb'}}></div>
+                
+                <Link to="/login" style={styles.ctaButton} className=" main-primary-color text-white btn border-0  rounded-1 px-4 btn-hover-color">
+                     Edit <i className="bi bi-arrow-right ms-1"></i>
+                </Link>
+            </div>
 
-            {/* The Canvas */}
-            <div className="flex-grow-1" style={{ width: '100%', height: '100%' }}>
+    
+            <a href="/" style={{textDecoration: 'none'}}>
+                <div style={styles.badge} className="d-none d-md-flex">
+                    <span style={{color: '#9ca3af', fontWeight: '400'}}>Powered by</span>
+                    <i className="bi bi-stars text-primary"></i>
+                    SketchQL Designer
+                </div>
+            </a>
+
+            
+            <div style={{ width: '100%', height: '100%' }}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
                     nodeTypes={nodeTypes}
                     edgeTypes={edgeTypes}
                     fitView
-                    // --- LOCK IT DOWN ---
-                    nodesDraggable={false} // Disable dragging
-                    nodesConnectable={false} // Disable new connections
-                    elementsSelectable={true} // Allow clicking but not moving
+                    nodesDraggable={false}
+                    nodesConnectable={false}
+                    elementsSelectable={true} 
                     zoomOnScroll={true}
                     panOnDrag={true}
                     preventScrolling={false}
+                    minZoom={0.2}
+                    maxZoom={2}
                 >
-                    <Background gap={12} size={1} />
-                    <Controls showInteractive={false} /> {/* Hides edit controls */}
-                    <MiniMap nodeColor="#0d6efd" />
+                    <Background 
+                        color="#e5e7eb" 
+                        gap={20} 
+                        size={1} 
+                        variant="dots" 
+                    />
+                    
+                    <Controls 
+                        showInteractive={false} 
+                        position="bottom-left"
+                        style={{ 
+                            marginBottom: '15px', 
+                            marginLeft: '15px',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                            border: 'none',
+                            borderRadius: '8px'
+                        }} 
+                    />
+                    
+                    
                 </ReactFlow>
             </div>
         </div>

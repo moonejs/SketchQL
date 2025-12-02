@@ -1,5 +1,5 @@
 export default function Image({className,src}){
     return(
-        <img src={`${src}`} className={`${className} img-fluid`} alt="hell" />
+        <img src={`${src}`} className={`${className} img-fluid`} alt="" />
     )
 }

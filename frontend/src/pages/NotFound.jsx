@@ -1,20 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import Btn from '../components/Landing/components/Btn';
 
+import { useNavigate } from "react-router-dom"
 export default function NotFound() {
+    const navigate = useNavigate();
     return (
-        <div className="d-flex align-items-center justify-content-center vh-100 bg-light">
-            <div className="text-center">
-                <h1 className="display-1 fw-bold text-primary">404</h1>
-                <p className="fs-3"> <span className="text-danger">Opps!</span> Page not found.</p>
-                <p className="lead">
-                    The page you’re looking for doesn’t exist.
-                </p>
-                <Link to="/dashboard" className="btn btn-primary">
-                    <i className="bi bi-house-door-fill me-2"></i>
-                    Go Home
-                </Link>
+        <>
+        <div className='main-bg-color-1 p-0 container-fluid h-100vh d-flex align-items-center position-relative'>
+            <div className='left position-absolute '>
+
+                <DotLottieReact  src="https://lottie.host/4282b122-c126-4929-91ec-8defa273a423/elCyOCiMGN.lottie"loop autoplay
+            />
             </div>
-        </div>
+            <div className='btn right position-absolute'>
+                <Btn word={"Home"} onClick={
+                        () => navigate('/')
+                    } className={"main-primary-color btn-hover-color rounded-1 text-white px-4"}></Btn>
+            </div>
+      </div>
+      </>
     );
 }

@@ -2,7 +2,9 @@
     --main-color:#6366F1;
     --main-color-hover:#4F46E5;
 }
-
+/* body{
+     font-family: "Comfortaa", sans-serif;
+} */
 .main-primary-color{
     background-color: var(--main-color);
 }
@@ -194,7 +196,7 @@
             z-index: -1; 
             inset: 3px; 
             
-            background: linear-gradient(90deg, #0ed4fc, #323dba); 
+            background: linear-gradient(90deg, #32b6d0, #03E1B8); 
             
             border-radius: 0; 
         }
@@ -219,3 +221,35 @@
     border-radius: 10px;
     
 }
+
+.illustration{
+    height: 27rem;
+    position: absolute;
+    top:-5rem;
+}
+.illustration2{
+    height: 27rem;
+    position: absolute;
+    top:-5rem;
+}
+.illustration3{
+    height: 19rem;
+    position: absolute;
+    top:-4rem;
+    right: 8rem;
+}
+.illustration4{
+    height: 4rem;
+    position: absolute;
+    left: 29rem;
+    top: -0.2rem;
+}
+
+.left{
+    width: 95%;
+    bottom: 4rem;
+    left: 2rem;
+}
+.right {
+    right: 48%;
+    bottom: 1rem;}

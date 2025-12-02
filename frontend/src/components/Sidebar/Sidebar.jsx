@@ -9,7 +9,7 @@ export default function Sidebar() {
   const selectedNodeId = useStore((state) => state.selectedNodeId);
   const setSelectedNode = useStore((state) => state.setSelectedNode);
   const updateNodeLabel = useStore((state) => state.updateNodeLabel);
-
+  const deleteTable = useStore((state) => state.deleteTable);
   const [renamingId, setRenamingId] = useState(null);
   const [tempName, setTempName] = useState("");
 
@@ -32,6 +32,12 @@ export default function Sidebar() {
     } else {
       setExpandedId(id);
       setSelectedNode(id);
+    }
+  };
+  const handleDeleteClick = (e, nodeId) => {
+    e.stopPropagation(); 
+    if (window.confirm("Are you sure you want to delete this table?")) {
+        deleteTable(nodeId);
     }
   };
 
@@ -159,6 +165,15 @@ export default function Sidebar() {
                                 fill="#8a8686ff"
                               >
                                 <path d="M480-320q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T560-480q0-33-23.5-56.5T480-560q-33 0-56.5 23.5T400-480q0 33 23.5 56.5T480-400Zm0-80ZM200-120q-33 0-56.5-23.5T120-200v-160h80v160h160v80H200Zm400 0v-80h160v-160h80v160q0 33-23.5 56.5T760-120H600ZM120-600v-160q0-33 23.5-56.5T200-840h160v80H200v160h-80Zm640 0v-160H600v-80h160q33 0 56.5 23.5T840-760v160h-80Z" />
+                              </svg>
+                            </button>
+                            <button
+                              className="border-0 bg-transparent p-0 text-danger"
+                              title="Delete Table"
+                              onClick={(e) => handleDeleteClick(e, node.id)}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="24px" fill="#8a8686ff">
+                                <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
                               </svg>
                             </button>
                           </>

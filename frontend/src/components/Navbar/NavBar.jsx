@@ -8,7 +8,7 @@ import AiModal from '../codeGenerator/AiModal';
 import { toPng } from 'html-to-image';
 import { useNavigate } from "react-router-dom"
 
-import logoImg from "../../assets/logoWhite.png"
+
 export default function NavBar(){
     const navigate = useNavigate();
     const handleCreateNew = () => {
@@ -44,7 +44,7 @@ export default function NavBar(){
         const height = bounds.maxY - bounds.minY + (PADDING * 2);
 
         toPng(viewport, { 
-            backgroundColor: '#ffffff',
+            backgroundColor: '#F8F9FA',
             width: width,
             height: height,
             style: {
@@ -115,8 +115,10 @@ export default function NavBar(){
         
             <nav className="navbar navbar-dark text-white navbar-expand-lg main-primary-color pt-2 pb-1">
                 <div className="container-fluid">
-                    <a className="" href="#">
-                        <Logo logo={logoImg}></Logo>
+                    <a className="" onClick={
+                        () => navigate('/')
+                    }>
+                        <Logo logo={"d"}></Logo>
                     </a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>

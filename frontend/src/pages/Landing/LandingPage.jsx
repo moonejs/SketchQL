@@ -21,10 +21,8 @@ export default function LandingPage(){
                 </div>
                 <div className="main-bg-grad pb-5" id="features">
                     <Features/>
-                    <div className="mt-5 text-center">
-                        <Btn className={"main-primary-color btn-hover-color text-white px-4"} word={"See examples"}/>
-                    </div>
-                    <div>
+                    <hr />  
+                    <div id="techStack">
                         <TechStack/>
                     </div>
                     
