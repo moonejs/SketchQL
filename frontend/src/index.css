@@ -2,9 +2,9 @@
     --main-color:#6366F1;
     --main-color-hover:#4F46E5;
 }
-body{
+/* body{
      font-family: "Comfortaa", sans-serif;
-}
+} */
 .main-primary-color{
     background-color: var(--main-color);
 }
